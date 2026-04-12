@@ -123,8 +123,8 @@ export const useBoardStore = defineStore('board', () => {
     const widgetIdx = fromSection.widgets.findIndex(w => w.id === widgetId)
     if (widgetIdx === -1) return
 
-    const [widget] = fromSection.widgets.splice(widgetIdx, 1)
-    toSection.widgets.push(widget)
+    const widget = fromSection.widgets.splice(widgetIdx, 1)[0]
+    if (widget) toSection.widgets.push(widget)
   }
 
   function findWidget(sectionId: string, widgetId: string): WidgetInstance | undefined {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { ClockOptions } from '~~/shared/types'
-import { useNow, useDateFormat } from '@vueuse/core'
 
 const props = defineProps<{
   options: ClockOptions

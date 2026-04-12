@@ -19,8 +19,9 @@ const sections = computed(() => {
 })
 
 watch(open, (val) => {
-  if (val && store.board?.sections.length) {
-    targetSectionId.value = store.board.sections[0].id
+  const firstSection = store.board?.sections[0]
+  if (val && firstSection) {
+    targetSectionId.value = firstSection.id
   }
 })
 

@@ -13,7 +13,8 @@ const isLinkable = computed(() => props.widget.kind === 'service-link')
 
 const cardVariant = computed(() => {
   const variant = props.section.defaults?.cardVariant || 'outline'
-  return variant === 'accent' ? 'outline' : variant
+  if (variant === 'accent' || variant === 'ghost') return 'outline'
+  return variant
 })
 
 const cardColor = computed(() => {

@@ -29,12 +29,12 @@ function onDrop(e: DragEvent) {
   e.preventDefault()
   dragOver.value = false
   const files = e.dataTransfer?.files
-  if (files?.length) handleFile(files[0])
+  if (files?.[0]) handleFile(files[0])
 }
 
 function onFileChange(e: Event) {
   const input = e.target as HTMLInputElement
-  if (input.files?.length) handleFile(input.files[0])
+  if (input.files?.[0]) handleFile(input.files[0])
   input.value = ''
 }
 
