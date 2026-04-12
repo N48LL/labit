@@ -14,7 +14,22 @@ A self-hosted homepage portal for your homelab services.
 
 ## Docker
 
-Soon™
+```yaml
+services:
+  labbit:
+    image: n48ll/labbit:latest
+    ports:
+      - 3000:3000
+    volumes:
+      - ./data/boards:/app/data/boards
+      - ./data/icons:/app/data/icons
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+```
 
 ## Development
 
