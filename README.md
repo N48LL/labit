@@ -1,4 +1,4 @@
-# 🐇 Labbit
+# <img src="public/favicon.svg" width="28" height="28" alt="Labbit" /> Labbit
 
 A self-hosted homepage portal for your homelab services.
 
@@ -36,4 +36,4 @@ Open [localhost:3000](http://localhost:3000)
 
 ## License
 
-MIT
+[MIT](LICENSE)
