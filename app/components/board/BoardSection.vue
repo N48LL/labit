@@ -81,14 +81,14 @@ function toggleCollapse() {
       >
         <UButton
           icon="i-lucide-settings"
-          size="xs"
+          size="sm"
           variant="ghost"
           color="neutral"
           @click="showSettings = true"
         />
         <UButton
           icon="i-lucide-trash-2"
-          size="xs"
+          size="sm"
           variant="ghost"
           color="error"
           @click="showDeleteConfirm = true"
