@@ -13,12 +13,6 @@ const { markDirty } = useEditMode()
 const showSettings = ref(false)
 const menuOpen = ref(false)
 
-function onContextMenu(e: MouseEvent) {
-  if (props.disabled) return
-  e.preventDefault()
-  menuOpen.value = true
-}
-
 const items = computed(() => {
   if (props.disabled) return []
 
@@ -119,15 +113,12 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div
-    class="relative"
-    @contextmenu="onContextMenu"
-  >
+  <div class="relative">
     <slot />
 
     <div
       v-if="!disabled"
-      class="absolute top-1.5 right-1.5 z-10"
+      class="no-drag absolute top-1.5 right-1.5 z-10"
     >
       <UDropdownMenu
         v-model:open="menuOpen"
