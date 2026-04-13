@@ -10,6 +10,13 @@ const { isEditing, markDirty } = useEditMode()
 const store = useBoardStore()
 
 const showSettings = ref(false)
+const showDeleteConfirm = ref(false)
+
+function confirmDelete() {
+  store.removeSection(props.section.id)
+  markDirty()
+  showDeleteConfirm.value = false
+}
 
 const gridClass = computed(() => {
   const cols: Record<number, string> = {
@@ -84,7 +91,7 @@ function toggleCollapse() {
           size="xs"
           variant="ghost"
           color="error"
-          @click="store.removeSection(section.id); markDirty()"
+          @click="showDeleteConfirm = true"
         />
       </div>
     </div>
@@ -129,5 +136,29 @@ function toggleCollapse() {
       v-model:open="showSettings"
       :section="section"
     />
+
+    <UModal
+      v-model:open="showDeleteConfirm"
+      :title="`Delete &quot;${section.title}&quot;?`"
+      :description="section.widgets.length
+        ? `This section contains ${section.widgets.length} widget${section.widgets.length > 1 ? 's' : ''} that will be removed.`
+        : 'This section is empty.'"
+    >
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <UButton
+            label="Cancel"
+            color="neutral"
+            variant="ghost"
+            @click="showDeleteConfirm = false"
+          />
+          <UButton
+            label="Delete"
+            color="error"
+            @click="confirmDelete"
+          />
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>
