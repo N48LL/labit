@@ -41,7 +41,7 @@ function pluginsAt(position: string) {
       :color="cardColor"
       class="relative h-full transition-all duration-200"
       :class="{
-        'ring-2 ring-primary/30 hover:ring-primary/50': isEditing,
+        'ring-2 ring-primary/30 hover:ring-primary/50 select-none': isEditing,
         'ring-2 ring-primary/30': isAccent && !isEditing,
         'hover:ring-1 hover:ring-accented cursor-pointer': isLinkable && !isEditing
       }"

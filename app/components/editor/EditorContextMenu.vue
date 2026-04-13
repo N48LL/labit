@@ -11,6 +11,13 @@ const store = useBoardStore()
 const { markDirty } = useEditMode()
 
 const showSettings = ref(false)
+const menuOpen = ref(false)
+
+function onContextMenu(e: MouseEvent) {
+  if (props.disabled) return
+  e.preventDefault()
+  menuOpen.value = true
+}
 
 const items = computed(() => {
   if (props.disabled) return []
@@ -112,19 +119,18 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div class="relative">
-    <UContextMenu
-      :items="items"
-      :disabled="disabled"
-    >
-      <slot />
-    </UContextMenu>
+  <div
+    class="relative"
+    @contextmenu="onContextMenu"
+  >
+    <slot />
 
     <div
       v-if="!disabled"
       class="absolute top-1.5 right-1.5 z-10"
     >
       <UDropdownMenu
+        v-model:open="menuOpen"
         :items="items"
         :content="{ align: 'end' }"
       >
