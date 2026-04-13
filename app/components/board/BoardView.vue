@@ -14,6 +14,9 @@ const { isEditing, markDirty } = useEditMode()
       handle=".section-handle"
       :animation="150"
       ghost-class="opacity-30"
+      :force-fallback="true"
+      :fallback-on-body="true"
+      :fallback-tolerance="3"
       class="flex flex-col gap-6"
       @change="markDirty"
     >

@@ -6,7 +6,7 @@ const props = defineProps<{
   section: BoardSection
 }>()
 
-const { isEditing, markDirty } = useEditMode()
+const { isEditing, showWidgetPicker, markDirty } = useEditMode()
 const store = useBoardStore()
 
 const showSettings = ref(false)
@@ -104,6 +104,11 @@ function toggleCollapse() {
         group="widgets"
         :animation="150"
         ghost-class="opacity-30"
+        :force-fallback="true"
+        :fallback-on-body="true"
+        :fallback-tolerance="3"
+        filter=".no-drag"
+        :prevent-on-filter="false"
         class="grid gap-4"
         :class="gridClass"
         @change="onDragChange"
@@ -118,9 +123,10 @@ function toggleCollapse() {
       </VueDraggable>
       <!-- eslint-enable vue/no-mutating-props -->
 
-      <div
+      <button
         v-if="section.widgets.length === 0 && isEditing"
-        class="border-2 border-dashed border-default rounded-lg p-8 text-center text-dimmed"
+        class="w-full border-2 border-dashed border-default rounded-lg p-8 text-center text-dimmed hover:border-primary hover:text-muted transition-colors cursor-pointer"
+        @click="showWidgetPicker = true"
       >
         <UIcon
           name="i-lucide-plus"
@@ -129,7 +135,7 @@ function toggleCollapse() {
         <p class="text-sm">
           Drag widgets here or add from the widget picker
         </p>
-      </div>
+      </button>
     </div>
 
     <EditorSectionSettings

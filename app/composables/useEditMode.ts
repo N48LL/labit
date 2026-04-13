@@ -1,6 +1,7 @@
 export function useEditMode() {
   const isEditing = useState('editMode', () => false)
   const hasUnsavedChanges = useState('unsavedChanges', () => false)
+  const showWidgetPicker = useState('showWidgetPicker', () => false)
 
   function enterEditMode() {
     isEditing.value = true
@@ -20,6 +21,7 @@ export function useEditMode() {
   return {
     isEditing,
     hasUnsavedChanges,
+    showWidgetPicker,
     enterEditMode,
     exitEditMode,
     markDirty

@@ -11,6 +11,7 @@ const store = useBoardStore()
 const { markDirty } = useEditMode()
 
 const showSettings = ref(false)
+const menuOpen = ref(false)
 
 const items = computed(() => {
   if (props.disabled) return []
@@ -113,18 +114,14 @@ const items = computed(() => {
 
 <template>
   <div class="relative">
-    <UContextMenu
-      :items="items"
-      :disabled="disabled"
-    >
-      <slot />
-    </UContextMenu>
+    <slot />
 
     <div
       v-if="!disabled"
-      class="absolute top-1.5 right-1.5 z-10"
+      class="no-drag absolute top-1.5 right-1.5 z-10"
     >
       <UDropdownMenu
+        v-model:open="menuOpen"
         :items="items"
         :content="{ align: 'end' }"
       >
