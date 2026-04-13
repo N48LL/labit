@@ -58,7 +58,7 @@ function toggleCollapse() {
       <UIcon
         v-if="isEditing"
         name="i-lucide-grip-vertical"
-        class="section-handle cursor-grab text-dimmed hover:text-muted"
+        class="section-handle size-6 cursor-grab text-muted hover:text-default p-1 -ml-1 rounded"
       />
       <button
         v-if="section.showTitle"
