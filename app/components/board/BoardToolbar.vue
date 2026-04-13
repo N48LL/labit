@@ -1,8 +1,6 @@
 <script setup lang="ts">
 const store = useBoardStore()
-const { isEditing, hasUnsavedChanges, enterEditMode, exitEditMode, markDirty } = useEditMode()
-
-const showWidgetPicker = ref(false)
+const { isEditing, hasUnsavedChanges, showWidgetPicker, enterEditMode, exitEditMode, markDirty } = useEditMode()
 const showBoardSettings = ref(false)
 
 const toast = useToast()
