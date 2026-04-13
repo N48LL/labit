@@ -112,13 +112,31 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="relative">
     <UContextMenu
       :items="items"
       :disabled="disabled"
     >
       <slot />
     </UContextMenu>
+
+    <div
+      v-if="!disabled"
+      class="absolute top-1.5 right-1.5 z-10"
+    >
+      <UDropdownMenu
+        :items="items"
+        :content="{ align: 'end' }"
+      >
+        <UButton
+          icon="i-lucide-ellipsis-vertical"
+          size="md"
+          variant="ghost"
+          color="neutral"
+          class="rounded-full"
+        />
+      </UDropdownMenu>
+    </div>
 
     <EditorWidgetSettings
       v-model:open="showSettings"
