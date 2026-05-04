@@ -9,6 +9,8 @@ const emit = defineEmits<{
 
 const open = defineModel<boolean>('open', { default: false })
 
+const isMobile = useMediaQuery('(max-width: 768px)')
+
 const toast = useToast()
 const searchQuery = ref('')
 const selectedIcon = ref('')
@@ -66,7 +68,8 @@ async function deleteIcon(filename: string) {
 <template>
   <UModal
     v-model:open="open"
-    fullscreen
+    :fullscreen="isMobile"
+    :ui="{ content: 'sm:max-w-3xl sm:h-[80vh]' }"
     title="Custom Icons"
   >
     <template #body>
