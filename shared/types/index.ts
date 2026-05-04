@@ -87,6 +87,7 @@ export interface ClockOptions {
   format24h: boolean
   showSeconds: boolean
   showDate: boolean
+  size?: 'sm' | 'md' | 'lg' | 'xl'
   timezone?: string
 }
 
