@@ -43,7 +43,7 @@ function onDragChange() {
 }
 
 function toggleCollapse() {
-  if (props.section.collapsible === false) return
+  if (!props.section.collapsible) return
   store.updateSection(props.section.id, { collapsed: !props.section.collapsed })
   markDirty()
 }
@@ -63,17 +63,17 @@ function toggleCollapse() {
       <button
         v-if="section.showTitle"
         class="flex items-center gap-1.5"
-        :class="{ 'cursor-pointer': section.collapsible !== false && section.widgets.length > 0 }"
+        :class="{ 'cursor-pointer': section.collapsible && section.widgets.length > 0 }"
         @click="toggleCollapse"
       >
         <UIcon
-          v-if="section.collapsible !== false && section.widgets.length > 0"
+          v-if="section.collapsible && section.widgets.length > 0"
           :name="section.collapsed ? 'i-lucide-chevron-right' : 'i-lucide-chevron-down'"
           class="size-4 text-dimmed"
         />
-        <h2 class="text-sm font-semibold text-muted uppercase tracking-wide">
+        <span class="text-sm font-semibold text-muted uppercase tracking-wide">
           {{ section.title }}
-        </h2>
+        </span>
       </button>
       <div
         v-if="isEditing"
@@ -96,7 +96,7 @@ function toggleCollapse() {
       </div>
     </div>
 
-    <div v-show="section.collapsible === false || !section.collapsed">
+    <div v-show="!section.collapsible || !section.collapsed">
       <!-- eslint-disable vue/no-mutating-props -->
       <VueDraggable
         v-model="section.widgets"
@@ -132,9 +132,9 @@ function toggleCollapse() {
           name="i-lucide-plus"
           class="size-6 mb-2"
         />
-        <p class="text-sm">
+        <span class="text-sm">
           Drag widgets here or add from the widget picker
-        </p>
+        </span>
       </button>
     </div>
 

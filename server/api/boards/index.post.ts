@@ -10,9 +10,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Board must have a title' })
   }
 
-  const storage = useStorage('boards')
-
-  const existing = await storage.getItem<Board>(body.id)
+  const existing = await readBoard(body.id)
   if (existing) {
     throw createError({ statusCode: 409, statusMessage: 'Board already exists' })
   }
@@ -21,6 +19,6 @@ export default defineEventHandler(async (event) => {
   body.createdAt = now
   body.updatedAt = now
 
-  await storage.setItem(body.id, body)
+  await writeBoard(body)
   return body
 })
