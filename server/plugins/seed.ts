@@ -194,12 +194,10 @@ const DEFAULT_BOARD: Board = {
 }
 
 export default defineNitroPlugin(async () => {
-  const storage = useStorage('boards')
-  const existing = await storage.getItem('default')
+  const boards = await listBoards()
+  if (boards.length > 0) return
 
-  if (!existing) {
-    console.log('[labbit] No boards found, creating default board...')
-    await storage.setItem('default', DEFAULT_BOARD)
-    console.log('[labbit] Default board created.')
-  }
+  console.log('[labbit] No boards found, creating default board...')
+  await writeBoard(DEFAULT_BOARD)
+  console.log('[labbit] Default board created.')
 })
