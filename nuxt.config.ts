@@ -22,15 +22,6 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2025-01-15',
 
-  nitro: {
-    storage: {
-      boards: {
-        driver: 'fs',
-        base: './data/boards'
-      }
-    }
-  },
-
   eslint: {
     config: {
       stylistic: {

@@ -2,20 +2,7 @@ import { writeFile, readdir, mkdir } from 'node:fs/promises'
 import { join, extname } from 'node:path'
 import { Buffer } from 'node:buffer'
 
-const MAX_FILE_SIZE = 512 * 1024
-const MAX_FILE_COUNT = 200
 const ALLOWED_TYPES = ['image/svg+xml', 'image/png', 'image/jpeg', 'image/webp']
-
-function sanitizeFilename(raw: string): string {
-  const ext = extname(raw).toLowerCase()
-  const base = raw
-    .slice(0, -ext.length)
-    .toLowerCase()
-    .replace(/[^a-z0-9-]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-  return base ? `${base}${ext}` : ''
-}
 
 export default defineEventHandler(async (event) => {
   const formData = await readMultipartFormData(event)
@@ -26,8 +13,8 @@ export default defineEventHandler(async (event) => {
   await mkdir(ICONS_DIR, { recursive: true })
 
   const existing = await readdir(ICONS_DIR)
-  if (existing.length >= MAX_FILE_COUNT) {
-    throw createError({ statusCode: 400, statusMessage: `Maximum ${MAX_FILE_COUNT} custom icons allowed` })
+  if (existing.length >= MAX_ICON_COUNT) {
+    throw createError({ statusCode: 400, statusMessage: `Maximum ${MAX_ICON_COUNT} custom icons allowed` })
   }
 
   const file = formData[0]
@@ -35,7 +22,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid file' })
   }
 
-  if (file.data.length > MAX_FILE_SIZE) {
+  if (file.data.length > MAX_ICON_SIZE) {
     throw createError({ statusCode: 400, statusMessage: 'File too large (max 512KB)' })
   }
 
@@ -50,7 +37,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Content type header required' })
   }
 
-  const safeName = sanitizeFilename(file.filename)
+  const safeName = sanitizeIconFilename(file.filename)
   if (!safeName) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid filename' })
   }

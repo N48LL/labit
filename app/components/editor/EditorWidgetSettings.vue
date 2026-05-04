@@ -16,9 +16,33 @@ const definition = computed(() => getDefinition(props.widget.kind))
 
 const localOptions = ref<Record<string, unknown>>({})
 
+const { getAllPlugins } = usePluginRegistry()
+
+const enabledPlugins = computed(() => {
+  return getAllPlugins().filter((plugin) => {
+    if (plugin.compatibleWith !== '*' && !plugin.compatibleWith.includes(props.widget.kind)) return false
+    if (!plugin.settingsComponent) return false
+    const widgetEnabled = props.widget.plugins?.[plugin.id]?.enabled
+    const sectionEnabled = props.section.defaults?.plugins?.[plugin.id]?.enabled
+    return widgetEnabled ?? sectionEnabled ?? false
+  })
+})
+
+const pluginConfigs = ref<Record<string, Record<string, unknown>>>({})
+
 watch(open, (val) => {
   if (val) {
     localOptions.value = JSON.parse(JSON.stringify(props.widget.options))
+
+    const configs: Record<string, Record<string, unknown>> = {}
+    for (const plugin of enabledPlugins.value) {
+      configs[plugin.id] = {
+        ...plugin.defaultConfig,
+        ...(props.section.defaults?.plugins?.[plugin.id]?.config || {}),
+        ...(props.widget.plugins?.[plugin.id]?.config || {})
+      }
+    }
+    pluginConfigs.value = configs
   }
 })
 
@@ -62,6 +86,13 @@ function createAndAssignLabel() {
 
 function handleSave() {
   store.updateWidgetOptions(props.section.id, props.widget.id, localOptions.value)
+
+  for (const [pluginId, config] of Object.entries(pluginConfigs.value)) {
+    store.updateWidgetPlugins(props.section.id, props.widget.id, {
+      [pluginId]: { enabled: true, config }
+    })
+  }
+
   markDirty()
   open.value = false
 }
@@ -228,6 +259,28 @@ function handleSave() {
               @update:model-value="localOptions.content = $event"
             />
           </UFormField>
+        </template>
+
+        <USeparator
+          v-if="enabledPlugins.length > 0"
+          class="my-2"
+        />
+
+        <template
+          v-for="plugin in enabledPlugins"
+          :key="plugin.id"
+        >
+          <div class="flex items-center gap-2 pb-2">
+            <UIcon
+              :name="plugin.icon"
+              class="size-4 text-dimmed"
+            />
+            <span class="text-sm font-medium text-muted">{{ plugin.label }}</span>
+          </div>
+          <component
+            :is="plugin.settingsComponent"
+            v-model:config="pluginConfigs[plugin.id]"
+          />
         </template>
       </div>
     </template>

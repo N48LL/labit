@@ -7,9 +7,8 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody<Board>(event)
-  const storage = useStorage('boards')
 
-  const existing = await storage.getItem<Board>(id)
+  const existing = await readBoard(id)
   if (!existing) {
     throw createError({ statusCode: 404, statusMessage: 'Board not found' })
   }
@@ -17,6 +16,6 @@ export default defineEventHandler(async (event) => {
   body.id = id
   body.createdAt = existing.createdAt
   body.updatedAt = new Date().toISOString()
-  await storage.setItem(id, body)
+  await writeBoard(body)
   return body
 })

@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs'
-import { createRequire } from 'node:module'
+import lucideData from '@iconify-json/lucide/icons.json'
+import simpleIconsData from '@iconify-json/simple-icons/icons.json'
 
 interface IconCollection {
   id: string
@@ -8,33 +8,22 @@ interface IconCollection {
   iconNames: string[]
 }
 
-let collections: IconCollection[] | null = null
-
-function loadCollections(): IconCollection[] {
-  const require = createRequire(import.meta.url)
-
-  const specs = [
-    { id: 'lucide', name: 'Lucide', pkg: '@iconify-json/lucide/icons.json' },
-    { id: 'simple-icons', name: 'Simple Icons', pkg: '@iconify-json/simple-icons/icons.json' }
-  ]
-
-  return specs.map((spec) => {
-    const jsonPath = require.resolve(spec.pkg)
-    const data = JSON.parse(readFileSync(jsonPath, 'utf-8'))
-    const iconNames = Object.keys(data.icons)
-    return {
-      id: spec.id,
-      name: spec.name,
-      prefix: data.prefix,
-      iconNames
-    }
-  })
-}
+const collections: IconCollection[] = [
+  {
+    id: 'lucide',
+    name: 'Lucide',
+    prefix: lucideData.prefix,
+    iconNames: Object.keys(lucideData.icons)
+  },
+  {
+    id: 'simple-icons',
+    name: 'Simple Icons',
+    prefix: simpleIconsData.prefix,
+    iconNames: Object.keys(simpleIconsData.icons)
+  }
+]
 
 export function getCollections(): IconCollection[] {
-  if (!collections) {
-    collections = loadCollections()
-  }
   return collections
 }
 

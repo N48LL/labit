@@ -5,9 +5,10 @@ A self-hosted homepage portal for your homelab services.
 ## Features
 
 - Drag-and-drop sections and widgets
-- Visual icon picker (5000+ icons)
-- Custom icon uploads
-- Labels with color coding
+- icon picker (5000+ icons)
+- Custom icon uploads or download from known sources
+- Labels
+- Health check
 - Theme customization (colors, card styles)
 - Dark/light mode
 - Edit mode with right-click context menus
@@ -30,6 +31,10 @@ services:
     tmpfs:
       - /tmp
 ```
+
+> [!WARNING]
+> Labbit has no built-in authentication. Run it on your LAN, over a VPN, or behind an auth proxy (Authelia, Authentik, Tailscale).
+
 
 ## Development
 
