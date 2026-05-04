@@ -28,7 +28,7 @@ function initFromProps() {
 }
 initFromProps()
 
-const activeTab = ref(props.iconType === 'iconify' ? 'iconify' : 'image')
+const activeTab = ref(props.iconType === 'iconify' ? 'iconify' : 'custom')
 
 watch(() => [props.icon, props.iconType] as const, ([nextIcon, nextType]) => {
   if (nextType === 'iconify') {
@@ -38,7 +38,7 @@ watch(() => [props.icon, props.iconType] as const, ([nextIcon, nextType]) => {
     const nextImageType = nextType === 'custom' ? 'custom' : 'url'
     if (imageValue.value !== nextIcon) imageValue.value = nextIcon
     if (imageType.value !== nextImageType) imageType.value = nextImageType
-    if (activeTab.value !== 'image') activeTab.value = 'image'
+    if (activeTab.value !== 'custom') activeTab.value = 'custom'
   }
 })
 
@@ -108,7 +108,7 @@ const imagePreviewSrc = computed(() => {
 
 const tabs = [
   { label: 'Iconify', value: 'iconify', icon: 'i-lucide-search' },
-  { label: 'Image', value: 'image', icon: 'i-lucide-image' }
+  { label: 'Custom', value: 'custom', icon: 'i-lucide-image' }
 ]
 </script>
 
@@ -148,7 +148,7 @@ const tabs = [
 
     <!-- Image tab (URL + Custom unified) -->
     <div
-      v-if="activeTab === 'image'"
+      v-if="activeTab === 'custom'"
       class="flex flex-col gap-3"
     >
       <!-- URL input with download button -->
@@ -169,6 +169,25 @@ const tabs = [
             @click="downloadIcon"
           />
         </UTooltip>
+        <UPopover mode="hover">
+          <UButton
+            icon="i-lucide-info"
+            variant="ghost"
+            color="neutral"
+          />
+          <template #content>
+            <div class="p-3 text-sm max-w-xs">
+              Tip: <ULink
+                to="https://selfh.st/icons/"
+                target="_blank"
+                class="text-primary"
+              >selfh.st/icons</ULink> has a great catalog. Copy a link, paste it here, and click <UIcon
+                name="i-lucide-download"
+                class="inline size-3.5 align-text-bottom"
+              /> to store it locally.
+            </div>
+          </template>
+        </UPopover>
       </div>
 
       <!-- Preview -->
