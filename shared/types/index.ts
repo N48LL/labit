@@ -51,7 +51,7 @@ export interface BoardSection {
   showTitle: boolean
   widgets: WidgetInstance[]
   defaults: {
-    cardVariant?: 'outline' | 'accent' | 'soft' | 'subtle' | 'ghost'
+    cardVariant?: 'outline' | 'accent' | 'subtle' | 'ghost'
     cardColor?: string
     plugins?: Record<string, {
       enabled?: boolean

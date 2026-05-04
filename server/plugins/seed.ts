@@ -40,7 +40,7 @@ const DEFAULT_BOARD: Board = {
         }
       ],
       defaults: {
-        cardVariant: 'soft'
+        cardVariant: 'subtle'
       }
     },
     {

@@ -23,7 +23,7 @@ watch(open, (val) => {
     localColumns.value = props.section.columns
     localLayout.value = props.section.layout
     localShowTitle.value = props.section.showTitle
-    localCollapsible.value = props.section.collapsible !== false
+    localCollapsible.value = props.section.collapsible
     localCardVariant.value = props.section.defaults?.cardVariant || 'outline'
   }
 })
@@ -57,8 +57,7 @@ const columnOptions = [
 const variantOptions: { label: string, value: string, description: string }[] = [
   { label: 'Outline', value: 'outline', description: 'Bordered card' },
   { label: 'Accent', value: 'accent', description: 'Colored border' },
-  { label: 'Soft', value: 'soft', description: 'Tinted background' },
-  { label: 'Subtle', value: 'subtle', description: 'Light background' },
+  { label: 'Tinted', value: 'subtle', description: 'Light tinted background' },
   { label: 'Ghost', value: 'ghost', description: 'No decoration' }
 ]
 </script>

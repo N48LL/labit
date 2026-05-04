@@ -9,16 +9,25 @@ const props = defineProps<{
 const { isEditing } = useEditMode()
 
 const isAccent = computed(() => props.section.defaults?.cardVariant === 'accent')
+const isGhost = computed(() => props.section.defaults?.cardVariant === 'ghost')
 const isLinkable = computed(() => props.widget.kind === 'service-link')
 
 const cardVariant = computed(() => {
-  const variant = props.section.defaults?.cardVariant || 'outline'
+  const variant = (props.section.defaults?.cardVariant || 'outline') as string
   if (variant === 'accent' || variant === 'ghost') return 'outline'
+  if (variant === 'soft') return 'subtle'
   return variant
 })
 
 const cardColor = computed(() => {
   return props.section.defaults?.cardColor || undefined
+})
+
+const cardUi = computed(() => {
+  if (isGhost.value) {
+    return { root: 'rounded-lg bg-transparent ring-0 divide-y-0', body: 'p-4' }
+  }
+  return { body: 'p-4' }
 })
 
 const resolvedPlugins = computed(() => {
@@ -41,11 +50,11 @@ function pluginsAt(position: string) {
       :color="cardColor"
       class="relative h-full transition-all duration-200"
       :class="{
-        'ring-2 ring-primary/30 hover:ring-primary/50 select-none': isEditing,
+        'hover:ring-2 hover:ring-primary/40 select-none cursor-grab': isEditing,
         'ring-2 ring-primary/30': isAccent && !isEditing,
         'hover:ring-1 hover:ring-accented cursor-pointer': isLinkable && !isEditing
       }"
-      :ui="{ body: 'p-4' }"
+      :ui="cardUi"
     >
       <div
         v-if="pluginsAt('top-left').length"
