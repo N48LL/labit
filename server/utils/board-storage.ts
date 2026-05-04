@@ -1,4 +1,4 @@
-import { readdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import type { Board } from '~~/shared/types'
 
@@ -16,6 +16,7 @@ export async function readBoard(id: string): Promise<Board | null> {
 }
 
 export async function writeBoard(board: Board): Promise<void> {
+  await mkdir(BOARDS_DIR, { recursive: true })
   await writeFile(boardPath(board.id), JSON.stringify(board, null, 2), 'utf-8')
 }
 
