@@ -12,11 +12,14 @@ const isAccent = computed(() => props.section.defaults?.cardVariant === 'accent'
 const isGhost = computed(() => props.section.defaults?.cardVariant === 'ghost')
 const isLinkable = computed(() => props.widget.kind === 'service-link')
 
-const cardVariant = computed(() => {
+type UCardVariant = 'outline' | 'subtle' | 'soft' | 'solid'
+
+const cardVariant = computed<UCardVariant>(() => {
   const variant = (props.section.defaults?.cardVariant || 'outline') as string
   if (variant === 'accent' || variant === 'ghost') return 'outline'
   if (variant === 'soft') return 'subtle'
-  return variant
+  if (variant === 'subtle' || variant === 'solid') return variant
+  return 'outline'
 })
 
 const cardColor = computed(() => {

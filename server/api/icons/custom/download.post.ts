@@ -146,7 +146,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Remote icon exceeds 512KB limit' })
   }
 
-  const contentType = (response.headers.get('content-type') || '').split(';')[0].trim()
+  const contentType = (response.headers.get('content-type') || '').split(';')[0]?.trim() || ''
   if (!Object.keys(MIME_TO_EXT).includes(contentType)) {
     throw createError({ statusCode: 400, statusMessage: `Unsupported content type: ${contentType}` })
   }
