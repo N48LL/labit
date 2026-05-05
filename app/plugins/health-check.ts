@@ -10,7 +10,8 @@ export default defineNuxtPlugin(() => {
     icon: 'i-lucide-activity',
     defaultPosition: 'top-left',
     defaultConfig: {
-      intervalSeconds: 30
+      intervalSeconds: 30,
+      showLatency: false
     },
     compatibleWith: ['service-link'],
     component: HealthDot,

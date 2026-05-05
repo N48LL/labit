@@ -11,6 +11,11 @@ const intervalSeconds = computed({
   get: () => (config.value.intervalSeconds as number) || 30,
   set: (val: number) => { config.value = { ...config.value, intervalSeconds: val } }
 })
+
+const showLatency = computed({
+  get: () => Boolean(config.value.showLatency),
+  set: (val: boolean) => { config.value = { ...config.value, showLatency: val } }
+})
 </script>
 
 <template>
@@ -33,5 +38,10 @@ const intervalSeconds = computed({
         :step="10"
       />
     </UFormField>
+    <USwitch
+      v-model="showLatency"
+      label="Show response time"
+      description="Display latency in ms next to the status dot"
+    />
   </div>
 </template>
