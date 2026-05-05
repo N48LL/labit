@@ -20,19 +20,19 @@ const date = useDateFormat(now, 'dddd, MMMM D, YYYY')
 
 const timeSizeClass = computed(() => {
   switch (props.options.size) {
-    case 'sm': return 'text-xl'
-    case 'lg': return 'text-4xl'
-    case 'xl': return 'text-6xl'
-    default: return 'text-2xl'
+    case 'sm': return 'text-2xl'
+    case 'lg': return 'text-6xl'
+    case 'xl': return 'text-8xl'
+    default: return 'text-4xl'
   }
 })
 
 const dateSizeClass = computed(() => {
   switch (props.options.size) {
-    case 'sm': return 'text-xs'
-    case 'lg': return 'text-base'
-    case 'xl': return 'text-lg'
-    default: return 'text-sm'
+    case 'sm': return 'text-sm'
+    case 'lg': return 'text-xl'
+    case 'xl': return 'text-2xl'
+    default: return 'text-base'
   }
 })
 </script>
