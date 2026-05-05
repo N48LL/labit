@@ -73,7 +73,8 @@ function pluginsAt(position: string) {
       </div>
       <div
         v-if="pluginsAt('top-right').length"
-        class="absolute top-2 right-2 flex gap-1"
+        class="absolute top-2 flex gap-1"
+        :class="isEditing ? 'right-12' : 'right-2'"
       >
         <PluginSlot
           v-for="p in pluginsAt('top-right')"

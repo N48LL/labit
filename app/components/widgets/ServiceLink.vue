@@ -30,7 +30,7 @@ const linkAttrs = computed(() => {
   <component
     :is="isEditing ? 'div' : 'a'"
     v-bind="linkAttrs"
-    class="flex items-center gap-3 min-w-0"
+    class="flex items-center gap-4 min-w-0"
   >
     <div
       v-if="options.iconBackground"
