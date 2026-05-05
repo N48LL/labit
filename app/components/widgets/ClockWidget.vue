@@ -17,24 +17,49 @@ const timeFormat = computed(() => {
 
 const time = useDateFormat(now, timeFormat)
 const date = useDateFormat(now, 'dddd, MMMM D, YYYY')
+
+const timeSizeClass = computed(() => {
+  switch (props.options.size) {
+    case 'sm': return 'text-2xl'
+    case 'lg': return 'text-6xl'
+    case 'xl': return 'text-8xl'
+    default: return 'text-4xl'
+  }
+})
+
+const dateSizeClass = computed(() => {
+  switch (props.options.size) {
+    case 'sm': return 'text-sm'
+    case 'lg': return 'text-xl'
+    case 'xl': return 'text-2xl'
+    default: return 'text-base'
+  }
+})
 </script>
 
 <template>
   <ClientOnly>
     <div class="text-center">
-      <p class="text-2xl font-mono font-bold tabular-nums">
+      <p
+        class="font-mono font-bold tabular-nums"
+        :class="timeSizeClass"
+      >
         {{ time }}
       </p>
       <p
         v-if="options.showDate"
-        class="text-sm text-dimmed mt-1"
+        class="text-dimmed mt-1"
+        :class="dateSizeClass"
       >
         {{ date }}
       </p>
     </div>
     <template #fallback>
       <div class="text-center">
-        <p class="text-2xl font-mono font-bold tabular-nums">
+        <p
+          class="font-mono font-bold tabular-nums"
+          :class="timeSizeClass"
+        >
 &nbsp;
         </p>
       </div>

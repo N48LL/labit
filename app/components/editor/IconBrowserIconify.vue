@@ -9,6 +9,8 @@ const emit = defineEmits<{
 
 const open = defineModel<boolean>('open', { default: false })
 
+const isMobile = useMediaQuery('(max-width: 768px)')
+
 const searchQuery = ref('')
 const activeCollection = ref('lucide')
 const selectedIcon = ref('')
@@ -117,7 +119,8 @@ function confirm() {
 <template>
   <UModal
     v-model:open="open"
-    fullscreen
+    :fullscreen="isMobile"
+    :ui="{ content: 'sm:max-w-4xl sm:h-[80vh]' }"
     title="Browse Icons"
   >
     <template #body>

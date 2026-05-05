@@ -23,9 +23,10 @@ const DEFAULT_BOARD: Board = {
           kind: 'clock',
           span: 1,
           options: {
-            format24h: false,
+            format24h: true,
             showSeconds: false,
-            showDate: true
+            showDate: true,
+            size: 'md'
           },
           plugins: {}
         },

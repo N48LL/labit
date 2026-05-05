@@ -8,9 +8,10 @@ export default defineNuxtPlugin(() => {
     id: 'health-check',
     label: 'Health Check',
     icon: 'i-lucide-activity',
-    defaultPosition: 'top-left',
+    defaultPosition: 'top-right',
     defaultConfig: {
-      intervalSeconds: 30
+      intervalSeconds: 30,
+      showLatency: false
     },
     compatibleWith: ['service-link'],
     component: HealthDot,

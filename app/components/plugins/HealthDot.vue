@@ -35,13 +35,28 @@ const tooltip = computed(() => {
     ? `Offline (HTTP ${result.value.status})`
     : 'Offline (unreachable)'
 })
+
+const showLatency = computed(() => Boolean(props.config.showLatency))
+
+const latencyText = computed(() => {
+  if (!showLatency.value) return ''
+  if (result.value.loading) return ''
+  if (!result.value.online) return ''
+  return `${result.value.latency}ms`
+})
 </script>
 
 <template>
   <UTooltip :text="tooltip">
-    <span
-      class="block size-3 rounded-full ring-2 ring-white dark:ring-gray-900"
-      :class="dotColor"
-    />
+    <div class="inline-flex items-center gap-1.5">
+      <span
+        class="block size-3 rounded-full ring-2 ring-white dark:ring-gray-900"
+        :class="dotColor"
+      />
+      <span
+        v-if="latencyText"
+        class="text-xs font-medium text-muted tabular-nums"
+      >{{ latencyText }}</span>
+    </div>
   </UTooltip>
 </template>

@@ -234,6 +234,18 @@ function handleSave() {
         </template>
 
         <template v-if="widget.kind === 'clock'">
+          <UFormField label="Size">
+            <USelect
+              :model-value="(localOptions.size as string) || 'md'"
+              :items="[
+                { label: 'Small', value: 'sm' },
+                { label: 'Medium', value: 'md' },
+                { label: 'Large', value: 'lg' },
+                { label: 'Extra Large', value: 'xl' }
+              ]"
+              @update:model-value="localOptions.size = $event"
+            />
+          </UFormField>
           <USwitch
             :model-value="(localOptions.format24h as boolean)"
             label="24-hour format"

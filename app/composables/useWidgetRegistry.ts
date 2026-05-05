@@ -24,9 +24,10 @@ const widgetDefinitions: WidgetDefinition[] = [
     icon: 'i-lucide-clock',
     description: 'Shows current date and time',
     defaultOptions: {
-      format24h: false,
-      showSeconds: true,
-      showDate: true
+      format24h: true,
+      showSeconds: false,
+      showDate: true,
+      size: 'md'
     }
   },
   {
