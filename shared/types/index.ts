@@ -65,6 +65,8 @@ export interface Board {
   id: string
   title: string
   slug: string
+  icon?: string
+  iconType?: 'iconify' | 'url' | 'custom'
   settings: BoardSettings
   sections: BoardSection[]
   labels: LabelDefinition[]
