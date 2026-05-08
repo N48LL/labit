@@ -2,8 +2,26 @@
 const store = useBoardStore()
 const { isEditing, hasUnsavedChanges, showWidgetPicker, enterEditMode, exitEditMode, markDirty } = useEditMode()
 const showBoardSettings = ref(false)
+const showIconPicker = ref(false)
+
+const readOnly = useRuntimeConfig().public.readOnly
 
 const toast = useToast()
+
+const boardIcon = computed(() => store.board?.icon || 'i-lucide-rabbit')
+const boardIconType = computed<'iconify' | 'url' | 'custom'>(() => store.board?.iconType || 'iconify')
+
+function updateIcon(value: string) {
+  if (!store.board) return
+  store.board.icon = value
+  markDirty()
+}
+
+function updateIconType(value: 'iconify' | 'url' | 'custom') {
+  if (!store.board) return
+  store.board.iconType = value
+  markDirty()
+}
 
 async function handleSave() {
   try {
@@ -30,9 +48,24 @@ function handleAddSection() {
 <template>
   <div class="flex flex-wrap items-center gap-y-2 py-4">
     <div class="flex items-center gap-3 mr-auto">
-      <UIcon
-        name="i-lucide-rabbit"
-        class="size-7 text-primary"
+      <button
+        v-if="isEditing"
+        type="button"
+        class="rounded-md hover:bg-elevated transition-colors p-1 -m-1 cursor-pointer"
+        aria-label="Change icon"
+        @click="showIconPicker = true"
+      >
+        <ServiceIcon
+          :icon="boardIcon"
+          :icon-type="boardIconType"
+          class="size-7"
+        />
+      </button>
+      <ServiceIcon
+        v-else
+        :icon="boardIcon"
+        :icon-type="boardIconType"
+        class="size-7"
       />
       <input
         v-if="isEditing && store.board"
@@ -129,6 +162,7 @@ function handleAddSection() {
       </template>
       <template v-else>
         <UButton
+          v-if="!readOnly"
           icon="i-lucide-pencil"
           size="md"
           variant="ghost"
@@ -142,5 +176,28 @@ function handleAddSection() {
 
     <EditorWidgetPicker v-model:open="showWidgetPicker" />
     <EditorBoardSettings v-model:open="showBoardSettings" />
+
+    <UModal
+      v-model:open="showIconPicker"
+      title="Site Icon"
+      description="Pick the icon shown in the toolbar and used as the browser favicon."
+    >
+      <template #body>
+        <IconPicker
+          :icon="boardIcon"
+          :icon-type="boardIconType"
+          @update:icon="updateIcon"
+          @update:icon-type="updateIconType"
+        />
+      </template>
+      <template #footer>
+        <div class="flex justify-end">
+          <UButton
+            label="Done"
+            @click="showIconPicker = false"
+          />
+        </div>
+      </template>
+    </UModal>
   </div>
 </template>

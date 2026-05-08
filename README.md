@@ -1,17 +1,18 @@
 # <img src="public/favicon.svg" width="28" height="28" alt="Labbit" /> Labbit
 
-A self-hosted homepage portal for your homelab services.
+Simple self-hosted portal for your homelab. Easy to set up, easy to manage.
 
 ## Features
 
 - Drag-and-drop sections and widgets
-- icon picker (5000+ icons)
-- Custom icon uploads or download from known sources
-- Labels
-- Health check
-- Theme customization (colors, card styles)
-- Dark/light mode
-- Edit mode with right-click context menus
+- Service health checks with response times
+- Clock widget
+- Multiple boards
+- Custom title, logo and favicon
+- Themes, dark/light mode
+- Edit everything from the UI, no config files
+- 5000+ icons, plus your own uploads or direct downloads from sources like selfh.st
+
 
 ## Docker
 
@@ -24,6 +25,8 @@ services:
     volumes:
       - ./data/boards:/app/data/boards
       - ./data/icons:/app/data/icons
+    environment:
+      - NUXT_PUBLIC_READ_ONLY=false
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -31,6 +34,8 @@ services:
     tmpfs:
       - /tmp
 ```
+
+Set `NUXT_PUBLIC_READ_ONLY=true` to lock the UI and disable editing.
 
 > [!WARNING]
 > Labbit has no built-in authentication. Run it on your LAN, over a VPN, or behind an auth proxy (Authelia, Authentik, Tailscale).
@@ -47,8 +52,6 @@ npm run dev
 pnpm install
 pnpm dev
 ```
-
-Open [localhost:3000](http://localhost:3000)
 
 ## Tech
 
