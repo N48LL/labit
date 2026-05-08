@@ -23,7 +23,9 @@ export const neutralColors: { name: string, label: string, hex: string }[] = [
   { name: 'gray', label: 'Gray', hex: '#6b7280' },
   { name: 'zinc', label: 'Zinc', hex: '#71717a' },
   { name: 'neutral', label: 'Neutral', hex: '#737373' },
-  { name: 'stone', label: 'Stone', hex: '#78716c' }
+  { name: 'stone', label: 'Stone', hex: '#78716c' },
+  { name: 'midnight', label: 'Midnight', hex: '#243b53' },
+  { name: 'sand', label: 'Sand', hex: '#b08552' }
 ]
 
 export const labelColors = primaryColors.map(c => ({ name: c.name, hex: c.hex }))

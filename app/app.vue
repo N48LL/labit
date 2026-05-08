@@ -1,7 +1,20 @@
 <script setup lang="ts">
+import { isHex } from '~/utils/palette'
+
 const store = useBoardStore()
+const { applyPrimary, applyNeutral } = useTheme()
+
 const title = computed(() => store.board?.title || 'Labbit')
 const description = 'A self-hosted homepage portal with section-based layout and drag-and-drop editing.'
+
+watch(
+  () => [store.board?.settings?.theme?.primary, store.board?.settings?.theme?.neutral] as const,
+  ([primary, neutral]) => {
+    if (primary) applyPrimary(primary)
+    if (neutral) applyNeutral(neutral)
+  },
+  { immediate: true }
+)
 
 const favicon = computed(() => {
   const icon = store.board?.icon
@@ -12,7 +25,9 @@ const favicon = computed(() => {
     const [prefix, name] = icon.split(':')
     if (prefix && name) {
       const primaryName = store.board?.settings?.theme?.primary
-      const hex = primaryColors.find(c => c.name === primaryName)?.hex
+      const hex = isHex(primaryName)
+        ? primaryName
+        : primaryColors.find(c => c.name === primaryName)?.hex
       const colorParam = hex ? `?color=${encodeURIComponent(hex)}` : ''
       return { href: `https://api.iconify.design/${prefix}/${name}.svg${colorParam}`, type: 'image/svg+xml' }
     }

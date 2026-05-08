@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import type { LabelDefinition } from '~~/shared/types'
+import { isHex } from '~/utils/palette'
 
 const open = defineModel<boolean>('open', { default: false })
 
 const store = useBoardStore()
 const { markDirty } = useEditMode()
-const appConfig = useAppConfig()
+const { applyPrimary, applyNeutral } = useTheme()
 
 const localPrimary = ref('green')
 const localNeutral = ref('slate')
+
+const isCustomPrimary = computed(() => isHex(localPrimary.value))
+const isCustomNeutral = computed(() => isHex(localNeutral.value))
+
+const customPrimaryHex = computed(() => isCustomPrimary.value ? localPrimary.value : '#3b82f6')
+const customNeutralHex = computed(() => isCustomNeutral.value ? localNeutral.value : '#6b7280')
 
 watch(open, (val) => {
   if (val && store.board) {
@@ -19,14 +26,22 @@ watch(open, (val) => {
 
 function selectPrimary(color: string) {
   localPrimary.value = color
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  appConfig.ui.colors.primary = color as any
+  applyPrimary(color)
 }
 
 function selectNeutral(color: string) {
   localNeutral.value = color
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  appConfig.ui.colors.neutral = color as any
+  applyNeutral(color)
+}
+
+function onCustomPrimaryInput(event: Event) {
+  const hex = (event.target as HTMLInputElement).value
+  selectPrimary(hex)
+}
+
+function onCustomNeutralInput(event: Event) {
+  const hex = (event.target as HTMLInputElement).value
+  selectNeutral(hex)
 }
 
 function handleSave() {
@@ -82,10 +97,8 @@ function cancelEditLabel() {
 
 function handleCancel() {
   if (store.board) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    appConfig.ui.colors.primary = store.board.settings.theme.primary as any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    appConfig.ui.colors.neutral = store.board.settings.theme.neutral as any
+    applyPrimary(store.board.settings.theme.primary)
+    applyNeutral(store.board.settings.theme.neutral)
   }
   open.value = false
 }
@@ -107,31 +120,59 @@ function handleCancel() {
               class="group flex flex-col items-center gap-1 cursor-pointer"
               @click="selectPrimary(color.name)"
             >
-              <div
-                class="size-8 rounded-full transition-all"
+              <span
+                class="block size-8 rounded-full transition-all"
                 :class="localPrimary === color.name ? 'ring-2 ring-offset-2 ring-primary ring-offset-default' : 'hover:scale-110'"
                 :style="{ backgroundColor: color.hex }"
               />
               <span class="text-[10px] text-dimmed">{{ color.label }}</span>
             </button>
+            <label class="group flex flex-col items-center gap-1 cursor-pointer relative">
+              <span
+                class="block size-8 rounded-full transition-all"
+                :class="isCustomPrimary ? 'ring-2 ring-offset-2 ring-primary ring-offset-default' : 'hover:scale-110'"
+                :style="{ background: isCustomPrimary ? customPrimaryHex : 'conic-gradient(from 0deg, #ef4444, #f59e0b, #84cc16, #06b6d4, #6366f1, #d946ef, #ef4444)' }"
+              />
+              <span class="text-[10px] text-dimmed">Custom</span>
+              <input
+                type="color"
+                class="absolute inset-0 opacity-0 cursor-pointer"
+                :value="customPrimaryHex"
+                @input="onCustomPrimaryInput"
+              >
+            </label>
           </div>
         </UFormField>
 
-        <UFormField label="Neutral Color">
-          <div class="flex gap-3">
+        <UFormField label="Background Color">
+          <div class="flex flex-wrap gap-3">
             <button
               v-for="color in neutralColors"
               :key="color.name"
               class="flex flex-col items-center gap-1 cursor-pointer"
               @click="selectNeutral(color.name)"
             >
-              <div
-                class="size-8 rounded-full transition-all"
+              <span
+                class="block size-8 rounded-full transition-all"
                 :class="localNeutral === color.name ? 'ring-2 ring-offset-2 ring-primary ring-offset-default' : 'hover:scale-110'"
                 :style="{ backgroundColor: color.hex }"
               />
               <span class="text-[10px] text-dimmed">{{ color.label }}</span>
             </button>
+            <label class="flex flex-col items-center gap-1 cursor-pointer relative">
+              <span
+                class="block size-8 rounded-full transition-all"
+                :class="isCustomNeutral ? 'ring-2 ring-offset-2 ring-primary ring-offset-default' : 'hover:scale-110'"
+                :style="{ background: isCustomNeutral ? customNeutralHex : 'conic-gradient(from 0deg, #ef4444, #f59e0b, #84cc16, #06b6d4, #6366f1, #d946ef, #ef4444)' }"
+              />
+              <span class="text-[10px] text-dimmed">Custom</span>
+              <input
+                type="color"
+                class="absolute inset-0 opacity-0 cursor-pointer"
+                :value="customNeutralHex"
+                @input="onCustomNeutralInput"
+              >
+            </label>
           </div>
         </UFormField>
 
