@@ -4,6 +4,8 @@ const { isEditing, hasUnsavedChanges, showWidgetPicker, enterEditMode, exitEditM
 const showBoardSettings = ref(false)
 const showIconPicker = ref(false)
 
+const readOnly = useRuntimeConfig().public.readOnly
+
 const toast = useToast()
 
 const boardIcon = computed(() => store.board?.icon || 'i-lucide-rabbit')
@@ -160,6 +162,7 @@ function handleAddSection() {
       </template>
       <template v-else>
         <UButton
+          v-if="!readOnly"
           icon="i-lucide-pencil"
           size="md"
           variant="ghost"

@@ -16,6 +16,12 @@ export default defineNuxtConfig({
 
   css: ['~/assets/css/main.css'],
 
+  runtimeConfig: {
+    public: {
+      readOnly: false
+    }
+  },
+
   routeRules: {
     '/': { ssr: true }
   },

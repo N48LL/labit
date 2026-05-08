@@ -2,7 +2,7 @@
 import { isHex } from '~/utils/palette'
 
 const store = useBoardStore()
-const { applyPrimary, applyNeutral } = useTheme()
+const { applyPrimary, applyNeutral, customPaletteCss } = useTheme()
 
 const title = computed(() => store.board?.title || 'Labbit')
 const description = 'A self-hosted homepage portal with section-based layout and drag-and-drop editing.'
@@ -50,6 +50,9 @@ useHead({
       type: favicon.value.type
     }
   ]),
+  style: computed(() => customPaletteCss.value
+    ? [{ id: 'custom-palette', innerHTML: customPaletteCss.value, tagPriority: 'high' }]
+    : []),
   htmlAttrs: {
     lang: 'en'
   }

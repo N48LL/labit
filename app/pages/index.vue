@@ -1,17 +1,15 @@
 <script setup lang="ts">
 const store = useBoardStore()
-const appConfig = useAppConfig()
+const { applyPrimary, applyNeutral } = useTheme()
 
-await store.load('default')
+if (!store.board) {
+  await store.load('default')
+}
 
-watch(() => store.board?.settings.theme, (theme) => {
-  if (theme) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    appConfig.ui.colors.primary = theme.primary as any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    appConfig.ui.colors.neutral = theme.neutral as any
-  }
-}, { immediate: true })
+if (store.board) {
+  applyPrimary(store.board.settings.theme.primary)
+  applyNeutral(store.board.settings.theme.neutral)
+}
 </script>
 
 <template>

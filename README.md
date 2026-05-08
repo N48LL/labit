@@ -25,6 +25,8 @@ services:
     volumes:
       - ./data/boards:/app/data/boards
       - ./data/icons:/app/data/icons
+    environment:
+      - NUXT_PUBLIC_READ_ONLY=false
     restart: unless-stopped
     security_opt:
       - no-new-privileges:true
@@ -32,6 +34,8 @@ services:
     tmpfs:
       - /tmp
 ```
+
+Set `NUXT_PUBLIC_READ_ONLY=true` to lock the UI and disable editing.
 
 > [!WARNING]
 > Labbit has no built-in authentication. Run it on your LAN, over a VPN, or behind an auth proxy (Authelia, Authentik, Tailscale).

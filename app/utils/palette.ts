@@ -60,12 +60,11 @@ export function generatePalette(hex: string): Record<number, string> {
   return palette
 }
 
-export function applyDynamicPalette(name: string, hex: string) {
-  if (typeof document === 'undefined') return
+export function paletteToCssVars(name: string, hex: string): string {
   const palette = generatePalette(hex)
-  for (const [shade, value] of Object.entries(palette)) {
-    document.documentElement.style.setProperty(`--color-${name}-${shade}`, value)
-  }
+  return Object.entries(palette)
+    .map(([shade, value]) => `--color-${name}-${shade}:${value};`)
+    .join('')
 }
 
 export function isHex(value: string | undefined | null): value is string {
