@@ -38,13 +38,32 @@ const widgetDefinitions: WidgetDefinition[] = [
     defaultOptions: {
       content: ''
     }
+  },
+  {
+    kind: 'network-info',
+    label: 'Network Info',
+    icon: 'i-lucide-globe',
+    description: 'Public IP and location for the homelab or viewer',
+    defaultOptions: {
+      title: '',
+      mode: 'server',
+      showFlag: true,
+      flagStyle: 'circle',
+      showIp: true,
+      showCityCountry: true,
+      showIsp: false,
+      showAsn: false,
+      size: 'md',
+      refreshIntervalMs: 3_600_000
+    }
   }
 ]
 
 const widgetComponents: Partial<Record<WidgetKind, ReturnType<typeof defineAsyncComponent>>> = {
   'service-link': defineAsyncComponent(() => import('~/components/widgets/ServiceLink.vue')),
   'clock': defineAsyncComponent(() => import('~/components/widgets/ClockWidget.vue')),
-  'notes': defineAsyncComponent(() => import('~/components/widgets/NotesWidget.vue'))
+  'notes': defineAsyncComponent(() => import('~/components/widgets/NotesWidget.vue')),
+  'network-info': defineAsyncComponent(() => import('~/components/widgets/NetworkInfoWidget.vue'))
 }
 
 export function useWidgetRegistry() {

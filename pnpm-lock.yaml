@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@iconify-json/circle-flags':
+        specifier: ^1.2.10
+        version: 1.2.10
+      '@iconify-json/flag':
+        specifier: ^1.2.12
+        version: 1.2.12
       '@iconify-json/lucide':
         specifier: ^1.2.90
         version: 1.2.90
@@ -635,6 +641,12 @@ packages:
   '@humanwhocodes/retry@0.4.3':
     resolution: {integrity: sha512-bV0Tgo9K4hfPCek+aMAn81RppFKv2ySDQeMoSZuvTASywNTnVJCArCZE2FWqpvIatKu7VMRLWlR1EazvVhDyhQ==}
     engines: {node: '>=18.18'}
+
+  '@iconify-json/circle-flags@1.2.10':
+    resolution: {integrity: sha512-sZRxs689a281RtZvuAiKtV7pQHv8Tk0HkinSM7QvLgdLEK8xgGRCcbDvL09Rq+/KtemmsMzGhS9/qt+r3ca+Ug==}
+
+  '@iconify-json/flag@1.2.12':
+    resolution: {integrity: sha512-B5zphOSTn54UX9v1sKsR1atuhyuXExiAkjuLQA8aeDcB68+P6oiStEDeEEVkbHgwvFvklPM2G7GhqFw6VMnXhw==}
 
   '@iconify-json/lucide@1.2.90':
     resolution: {integrity: sha512-dPn1pRhfBa9KR+EVpdyM1Rvw3T36hCKYxd6TxK1ifffiNt0f5yXx8ZVhqnzPH4Vkz87yLMj5xFCXomNrnzd2kQ==}
@@ -5745,6 +5757,14 @@ snapshots:
   '@humanwhocodes/module-importer@1.0.1': {}
 
   '@humanwhocodes/retry@0.4.3': {}
+
+  '@iconify-json/circle-flags@1.2.10':
+    dependencies:
+      '@iconify/types': 2.0.0
+
+  '@iconify-json/flag@1.2.12':
+    dependencies:
+      '@iconify/types': 2.0.0
 
   '@iconify-json/lucide@1.2.90':
     dependencies:

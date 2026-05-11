@@ -19,7 +19,7 @@ export interface BoardSettings {
   }
 }
 
-export type WidgetKind = 'service-link' | 'clock' | 'notes'
+export type WidgetKind = 'service-link' | 'clock' | 'notes' | 'network-info'
 
 export type PluginPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'footer'
 
@@ -96,6 +96,49 @@ export interface ClockOptions {
 export interface NotesOptions {
   content: string
 }
+
+export type NetworkInfoFlagStyle = 'circle' | 'rectangular' | 'square'
+
+export interface NetworkInfoOptions {
+  title: string
+  mode: 'server' | 'client'
+  showFlag: boolean
+  flagStyle: NetworkInfoFlagStyle
+  showIp: boolean
+  showCityCountry: boolean
+  showIsp: boolean
+  showAsn: boolean
+  size?: 'sm' | 'md' | 'lg'
+  refreshIntervalMs: number
+}
+
+export interface NetworkInfoSuccess {
+  ip: string
+  countryCode: string
+  country: string
+  region: string
+  city: string
+  isp: string
+  org: string
+  asn: string
+  cached: boolean
+  fetchedAt: string
+  lan?: false
+}
+
+export interface NetworkInfoLan {
+  ip: string
+  lan: true
+  cached: false
+  fetchedAt: string
+}
+
+export interface NetworkInfoError {
+  error: 'unavailable'
+  reason: string
+}
+
+export type NetworkInfoResponse = NetworkInfoSuccess | NetworkInfoLan | NetworkInfoError
 
 export interface WidgetDefinition {
   kind: WidgetKind

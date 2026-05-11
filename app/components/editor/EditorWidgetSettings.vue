@@ -273,6 +273,104 @@ function handleSave() {
           </UFormField>
         </template>
 
+        <template v-if="widget.kind === 'network-info'">
+          <UFormField
+            label="Title"
+            description="Optional. Shown above the IP."
+          >
+            <UInput
+              :model-value="(localOptions.title as string) || ''"
+              placeholder="e.g. Homelab IP"
+              @update:model-value="localOptions.title = $event"
+            />
+          </UFormField>
+          <UFormField label="Mode">
+            <USelect
+              :model-value="(localOptions.mode as string) || 'server'"
+              :items="[
+                { label: 'Server (homelab\'s public IP)', value: 'server' },
+                { label: 'Viewer (each device\'s own IP)', value: 'client' }
+              ]"
+              @update:model-value="localOptions.mode = $event"
+            />
+          </UFormField>
+          <UFormField label="Size">
+            <USelect
+              :model-value="(localOptions.size as string) || 'md'"
+              :items="[
+                { label: 'Small', value: 'sm' },
+                { label: 'Medium', value: 'md' },
+                { label: 'Large', value: 'lg' }
+              ]"
+              @update:model-value="localOptions.size = $event"
+            />
+          </UFormField>
+          <USwitch
+            :model-value="(localOptions.showFlag as boolean)"
+            label="Show flag"
+            @update:model-value="localOptions.showFlag = $event"
+          />
+          <UFormField
+            v-if="localOptions.showFlag"
+            label="Flag style"
+          >
+            <div class="grid grid-cols-3 gap-2">
+              <button
+                v-for="opt in [
+                  { value: 'circle', label: 'Circle', icon: 'i-circle-flags-un', shape: 'rounded-full', size: 'size-8' },
+                  { value: 'rectangular', label: 'Rectangular', icon: 'i-flag-un-4x3', shape: 'rounded-sm', size: 'size-8' },
+                  { value: 'square', label: 'Square', icon: 'i-flag-un-1x1', shape: 'rounded-2xl', size: 'size-14' }
+                ]"
+                :key="opt.value"
+                type="button"
+                class="flex flex-col items-center justify-end gap-2 py-3 px-2 min-h-[6.5rem] rounded-lg border transition cursor-pointer"
+                :class="localOptions.flagStyle === opt.value
+                  ? 'border-primary ring-2 ring-primary/20'
+                  : 'border-default hover:border-accented'"
+                @click="localOptions.flagStyle = opt.value"
+              >
+                <UIcon
+                  :name="opt.icon"
+                  class="overflow-hidden"
+                  :class="[opt.shape, opt.size]"
+                />
+                <span class="text-xs text-muted">{{ opt.label }}</span>
+              </button>
+            </div>
+          </UFormField>
+          <USwitch
+            :model-value="(localOptions.showIp as boolean)"
+            label="Show IP address"
+            @update:model-value="localOptions.showIp = $event"
+          />
+          <USwitch
+            :model-value="(localOptions.showCityCountry as boolean)"
+            label="Show city + country"
+            @update:model-value="localOptions.showCityCountry = $event"
+          />
+          <USwitch
+            :model-value="(localOptions.showIsp as boolean)"
+            label="Show ISP"
+            @update:model-value="localOptions.showIsp = $event"
+          />
+          <USwitch
+            :model-value="(localOptions.showAsn as boolean)"
+            label="Show ASN"
+            @update:model-value="localOptions.showAsn = $event"
+          />
+          <UFormField
+            label="Refresh interval (seconds)"
+            description="0 disables auto-refresh. Server-mode is cached for 1 hour; viewer-mode for 5 minutes."
+          >
+            <UInput
+              type="number"
+              :min="0"
+              :model-value="Math.round((localOptions.refreshIntervalMs as number || 0) / 1000)"
+              @update:model-value="localOptions.refreshIntervalMs = Math.max(0, Number($event)) * 1000"
+            />
+          </UFormField>
+        </template>
+
         <USeparator
           v-if="enabledPlugins.length > 0"
           class="my-2"
