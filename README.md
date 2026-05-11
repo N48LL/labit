@@ -7,12 +7,13 @@ Simple self-hosted portal for your homelab. Easy to set up, easy to manage.
 - Drag-and-drop sections and widgets
 - Service health checks with response times
 - Clock widget
+- Network info widget
 - Multiple boards
 - Custom title, logo and favicon
 - Themes, dark/light mode
 - Edit everything from the UI, no config files
 - 5000+ icons, plus your own uploads or direct downloads from sources like selfh.st
-
+- Mobile Responsive Design
 
 ## Docker
 
