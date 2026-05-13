@@ -9,6 +9,12 @@ const props = defineProps<{
 
 const store = useBoardStore()
 const { markDirty } = useEditMode()
+const { getDefinition, getDefault } = useLayoutRegistry()
+
+const respectsWidgetSpan = computed(() => {
+  const def = getDefinition(store.board?.layout ?? getDefault())
+  return def?.respects.widgetSpan ?? true
+})
 
 const showSettings = ref(false)
 const menuOpen = ref(false)
@@ -73,14 +79,16 @@ const items = computed(() => {
         }
       }
     ],
-    [
-      {
-        label: 'Span',
-        icon: 'i-lucide-columns-2',
-        children: spanChildren
-      }
-    ]
-  ]
+    respectsWidgetSpan.value
+      ? [
+          {
+            label: 'Span',
+            icon: 'i-lucide-columns-2',
+            children: spanChildren
+          }
+        ]
+      : []
+  ].filter(g => g.length > 0)
 
   if (pluginChildren.length > 0) {
     groups.push([{

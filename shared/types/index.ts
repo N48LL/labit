@@ -61,12 +61,18 @@ export interface BoardSection {
   }
 }
 
+export type BoardLayoutId = 'hub' | 'rack' | 'operator'
+
 export interface Board {
   id: string
   title: string
   slug: string
   icon?: string
   iconType?: 'iconify' | 'url' | 'custom'
+  // Board-level visual shell. Distinct from BoardSection.layout (which is the
+  // intra-section widget arrangement). Optional in the type for legacy JSON;
+  // server normalizes to 'hub' on read so the client can treat it as required.
+  layout?: BoardLayoutId
   settings: BoardSettings
   sections: BoardSection[]
   labels: LabelDefinition[]

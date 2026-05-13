@@ -1,4 +1,4 @@
-import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition } from '~~/shared/types'
+import type { Board, BoardLayoutId, BoardSection, WidgetInstance, WidgetKind, LabelDefinition } from '~~/shared/types'
 import { generateId } from '~/utils/id'
 
 export const useBoardStore = defineStore('board', () => {
@@ -51,6 +51,11 @@ export const useBoardStore = defineStore('board', () => {
   function removeSection(sectionId: string) {
     if (!board.value) return
     board.value.sections = board.value.sections.filter(s => s.id !== sectionId)
+  }
+
+  function setLayout(layout: BoardLayoutId) {
+    if (!board.value) return
+    board.value.layout = layout
   }
 
   function updateSection(sectionId: string, updates: Partial<BoardSection>) {
@@ -197,6 +202,7 @@ export const useBoardStore = defineStore('board', () => {
     saving,
     load,
     save,
+    setLayout,
     addSection,
     removeSection,
     updateSection,

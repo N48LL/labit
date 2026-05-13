@@ -4,6 +4,7 @@ const DEFAULT_BOARD: Board = {
   id: 'default',
   title: 'My Homelab',
   slug: 'home',
+  layout: 'hub',
   settings: {
     background: { type: 'none', value: '' },
     theme: { primary: 'green', neutral: 'slate' }

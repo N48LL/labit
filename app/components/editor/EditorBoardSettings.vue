@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { LabelDefinition } from '~~/shared/types'
+import type { BoardLayoutId, LabelDefinition } from '~~/shared/types'
 import { isHex } from '~/utils/palette'
 
 const open = defineModel<boolean>('open', { default: false })
@@ -7,6 +7,10 @@ const open = defineModel<boolean>('open', { default: false })
 const store = useBoardStore()
 const { markDirty } = useEditMode()
 const { applyPrimary, applyNeutral } = useTheme()
+const { getAll: getAllLayouts, getDefault: getDefaultLayout } = useLayoutRegistry()
+
+const layoutOptions = getAllLayouts()
+const localLayout = ref<BoardLayoutId>(getDefaultLayout())
 
 const localPrimary = ref('green')
 const localNeutral = ref('slate')
@@ -19,10 +23,15 @@ const customNeutralHex = computed(() => isCustomNeutral.value ? localNeutral.val
 
 watch(open, (val) => {
   if (val && store.board) {
+    localLayout.value = store.board.layout ?? getDefaultLayout()
     localPrimary.value = store.board.settings.theme.primary
     localNeutral.value = store.board.settings.theme.neutral
   }
 })
+
+function selectLayout(id: BoardLayoutId) {
+  localLayout.value = id
+}
 
 function selectPrimary(color: string) {
   localPrimary.value = color
@@ -46,6 +55,9 @@ function onCustomNeutralInput(event: Event) {
 
 function handleSave() {
   if (!store.board) return
+  if (localLayout.value !== store.board.layout) {
+    store.setLayout(localLayout.value)
+  }
   store.board.settings.theme.primary = localPrimary.value
   store.board.settings.theme.neutral = localNeutral.value
   markDirty()
@@ -112,6 +124,43 @@ function handleCancel() {
   >
     <template #body>
       <div class="flex flex-col gap-6">
+        <UFormField
+          label="Layout"
+          help="Each board can be rendered in a different layout. Switching is non-destructive — your sections and widgets stay put."
+        >
+          <div class="grid grid-cols-1 gap-2">
+            <button
+              v-for="opt in layoutOptions"
+              :key="opt.id"
+              type="button"
+              class="flex items-start gap-3 rounded-lg border p-3 text-left transition cursor-pointer"
+              :class="localLayout === opt.id
+                ? 'border-primary ring-2 ring-primary/20 bg-elevated'
+                : 'border-default hover:border-accented'"
+              @click="selectLayout(opt.id)"
+            >
+              <UIcon
+                :name="opt.icon"
+                class="size-5 mt-0.5 shrink-0"
+                :class="localLayout === opt.id ? 'text-primary' : 'text-dimmed'"
+              />
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium">
+                  {{ opt.label }}
+                </div>
+                <div class="text-xs text-dimmed mt-0.5">
+                  {{ opt.description }}
+                </div>
+              </div>
+              <UIcon
+                v-if="localLayout === opt.id"
+                name="i-lucide-check"
+                class="size-4 mt-0.5 text-primary shrink-0"
+              />
+            </button>
+          </div>
+        </UFormField>
+
         <UFormField label="Primary Color">
           <div class="grid grid-cols-6 gap-2">
             <button

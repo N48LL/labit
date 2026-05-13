@@ -9,6 +9,12 @@ const open = defineModel<boolean>('open', { default: false })
 
 const store = useBoardStore()
 const { markDirty } = useEditMode()
+const { getDefinition, getDefault } = useLayoutRegistry()
+
+const activeLayout = computed(() =>
+  getDefinition(store.board?.layout ?? getDefault())
+)
+const respects = computed(() => activeLayout.value?.respects)
 
 const localTitle = ref('')
 const localColumns = ref(3)
@@ -74,10 +80,14 @@ const variantOptions: { label: string, value: string, description: string }[] = 
           <UInput v-model="localTitle" />
         </UFormField>
 
-        <UFormField label="Columns">
+        <UFormField
+          label="Columns"
+          :help="respects && !respects.sectionColumns ? respects.sectionColumnsCaption : undefined"
+        >
           <USelect
             :model-value="String(localColumns)"
             :items="columnOptions"
+            :disabled="respects ? !respects.sectionColumns : false"
             @update:model-value="localColumns = Number($event)"
           />
         </UFormField>
@@ -110,11 +120,25 @@ const variantOptions: { label: string, value: string, description: string }[] = 
         <USwitch
           v-model="localShowTitle"
           label="Show section title"
+          :disabled="respects ? !respects.sectionTitle : false"
         />
+        <p
+          v-if="respects && !respects.sectionTitle && respects.sectionTitleCaption"
+          class="text-xs text-dimmed -mt-3"
+        >
+          {{ respects.sectionTitleCaption }}
+        </p>
         <USwitch
           v-model="localCollapsible"
           label="Allow collapse"
+          :disabled="respects ? !respects.sectionCollapsible : false"
         />
+        <p
+          v-if="respects && !respects.sectionCollapsible && respects.sectionCollapsibleCaption"
+          class="text-xs text-dimmed -mt-3"
+        >
+          {{ respects.sectionCollapsibleCaption }}
+        </p>
       </div>
     </template>
 

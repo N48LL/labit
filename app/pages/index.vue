@@ -19,31 +19,27 @@ if (store.board) {
       :settings="store.board.settings"
     />
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <BoardToolbar />
+    <div
+      v-if="store.loading"
+      class="flex justify-center py-20"
+    >
+      <UIcon
+        name="i-lucide-loader-2"
+        class="size-8 animate-spin text-dimmed"
+      />
+    </div>
 
-      <div
-        v-if="store.loading"
-        class="flex justify-center py-20"
-      >
-        <UIcon
-          name="i-lucide-loader-2"
-          class="size-8 animate-spin text-dimmed"
-        />
-      </div>
+    <BoardLayoutRenderer v-else-if="store.board" />
 
-      <BoardView v-else-if="store.board" />
-
-      <div
-        v-else
-        class="text-center py-20 text-dimmed"
-      >
-        <UIcon
-          name="i-lucide-alert-circle"
-          class="size-12 mb-4"
-        />
-        <p>Failed to load board.</p>
-      </div>
+    <div
+      v-else
+      class="text-center py-20 text-dimmed"
+    >
+      <UIcon
+        name="i-lucide-alert-circle"
+        class="size-12 mb-4"
+      />
+      <p>Failed to load board.</p>
     </div>
   </div>
 </template>
