@@ -53,7 +53,8 @@ function toggleCollapse() {
   <div class="group/section">
     <div
       v-if="section.showTitle || isEditing"
-      class="flex items-center gap-2 mb-3"
+      class="flex items-center gap-2"
+      :style="{ marginBottom: 'var(--layout-section-title-spacing)' }"
     >
       <UIcon
         v-if="isEditing"
@@ -109,8 +110,9 @@ function toggleCollapse() {
         :fallback-tolerance="3"
         filter=".no-drag"
         :prevent-on-filter="false"
-        class="grid gap-4"
+        class="grid"
         :class="gridClass"
+        :style="{ gap: 'var(--layout-card-gap)' }"
         @change="onDragChange"
       >
         <WidgetWrapper

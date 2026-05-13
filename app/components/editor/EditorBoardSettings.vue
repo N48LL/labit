@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { LabelDefinition } from '~~/shared/types'
+import type { LabelDefinition, LayoutId } from '~~/shared/types'
+import { LAYOUTS } from '~~/shared/layouts'
 import { isHex } from '~/utils/palette'
 
 const open = defineModel<boolean>('open', { default: false })
@@ -10,6 +11,8 @@ const { applyPrimary, applyNeutral } = useTheme()
 
 const localPrimary = ref('green')
 const localNeutral = ref('slate')
+const localLayout = ref<LayoutId>('default')
+const originalLayout = ref<LayoutId>('default')
 
 const isCustomPrimary = computed(() => isHex(localPrimary.value))
 const isCustomNeutral = computed(() => isHex(localNeutral.value))
@@ -21,8 +24,15 @@ watch(open, (val) => {
   if (val && store.board) {
     localPrimary.value = store.board.settings.theme.primary
     localNeutral.value = store.board.settings.theme.neutral
+    localLayout.value = store.board.layout ?? 'default'
+    originalLayout.value = localLayout.value
   }
 })
+
+function selectLayout(id: LayoutId) {
+  localLayout.value = id
+  store.setLayout(id)
+}
 
 function selectPrimary(color: string) {
   localPrimary.value = color
@@ -48,6 +58,7 @@ function handleSave() {
   if (!store.board) return
   store.board.settings.theme.primary = localPrimary.value
   store.board.settings.theme.neutral = localNeutral.value
+  store.setLayout(localLayout.value)
   markDirty()
   open.value = false
 }
@@ -99,6 +110,7 @@ function handleCancel() {
   if (store.board) {
     applyPrimary(store.board.settings.theme.primary)
     applyNeutral(store.board.settings.theme.neutral)
+    store.setLayout(originalLayout.value)
   }
   open.value = false
 }
@@ -112,6 +124,36 @@ function handleCancel() {
   >
     <template #body>
       <div class="flex flex-col gap-6">
+        <UFormField
+          label="Layout"
+          hint="Visual layout for this board"
+        >
+          <div class="grid grid-cols-2 gap-2">
+            <button
+              v-for="(layout, id) in LAYOUTS"
+              :key="id"
+              type="button"
+              class="flex items-start gap-2 p-3 rounded-md border text-left transition-colors cursor-pointer"
+              :class="localLayout === id
+                ? 'border-primary bg-primary/10'
+                : 'border-default hover:bg-elevated'"
+              @click="selectLayout(id as LayoutId)"
+            >
+              <UIcon
+                :name="layout.icon"
+                class="size-5 shrink-0 mt-0.5"
+              />
+              <span class="min-w-0 flex flex-col">
+                <span class="font-medium text-sm">{{ layout.label }}</span>
+                <span
+                  v-if="layout.description"
+                  class="text-xs text-dimmed"
+                >{{ layout.description }}</span>
+              </span>
+            </button>
+          </div>
+        </UFormField>
+
         <UFormField label="Primary Color">
           <div class="grid grid-cols-6 gap-2">
             <button

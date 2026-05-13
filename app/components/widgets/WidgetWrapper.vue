@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import type { WidgetInstance, BoardSection } from '~~/shared/types'
+import { LAYOUTS, resolveLayoutId, type LayoutDefinition } from '~~/shared/layouts'
+import { WIDGET_KIND_STYLES } from '~~/shared/widget-kind-styles'
+import { resolveDisplayStyle } from '~~/shared/resolve-display-style'
 
 const props = defineProps<{
   widget: WidgetInstance
@@ -27,10 +30,11 @@ const cardColor = computed(() => {
 })
 
 const cardUi = computed(() => {
+  const body = 'p-[var(--layout-card-padding)]'
   if (isGhost.value) {
-    return { root: 'rounded-lg bg-transparent ring-0 divide-y-0', body: 'p-4' }
+    return { root: 'rounded-[var(--layout-card-radius)] bg-transparent ring-0 divide-y-0', body }
   }
-  return { body: 'p-4' }
+  return { body }
 })
 
 const resolvedPlugins = computed(() => {
@@ -40,6 +44,22 @@ const resolvedPlugins = computed(() => {
 function pluginsAt(position: string) {
   return resolvedPlugins.value.filter(p => p.position === position)
 }
+
+const { getComponentForStyle, getDefinition } = useWidgetRegistry()
+const store = useBoardStore()
+
+const resolvedStyle = computed(() => {
+  const activeLayout: LayoutDefinition = LAYOUTS[resolveLayoutId(store.board?.layout)]
+  const kindDefault = getDefinition(props.widget.kind)?.defaultDisplayStyle ?? 'full'
+  return resolveDisplayStyle(
+    props.widget.displayStyle,
+    activeLayout.defaultDisplayStyle[props.widget.kind],
+    kindDefault,
+    WIDGET_KIND_STYLES[props.widget.kind]
+  )
+})
+
+const variantComponent = computed(() => getComponentForStyle(props.widget.kind, resolvedStyle.value))
 </script>
 
 <template>
@@ -85,7 +105,18 @@ function pluginsAt(position: string) {
         />
       </div>
 
-      <WidgetRenderer :widget="widget" />
+      <component
+        :is="variantComponent"
+        v-if="variantComponent"
+        :options="widget.options"
+      />
+      <div
+        v-else
+        class="text-sm text-dimmed"
+        :style="{ padding: 'var(--layout-card-padding)' }"
+      >
+        Unknown widget: {{ widget.kind }} / {{ resolvedStyle }}
+      </div>
 
       <div
         v-if="pluginsAt('bottom-left').length"

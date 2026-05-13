@@ -1,8 +1,15 @@
 <script setup lang="ts">
 import { VueDraggable } from 'vue-draggable-plus'
+import { resolveLayoutId } from '~~/shared/layouts'
 
 const store = useBoardStore()
 const { isEditing, markDirty } = useEditMode()
+
+useHead({
+  htmlAttrs: {
+    'data-layout': computed(() => resolveLayoutId(store.board?.layout))
+  }
+})
 </script>
 
 <template>
@@ -17,7 +24,8 @@ const { isEditing, markDirty } = useEditMode()
       :force-fallback="true"
       :fallback-on-body="true"
       :fallback-tolerance="3"
-      class="flex flex-col gap-6"
+      class="flex flex-col"
+      :style="{ gap: 'var(--layout-section-spacing)' }"
       @change="markDirty"
     >
       <BoardSection

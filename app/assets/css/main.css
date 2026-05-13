@@ -40,3 +40,11 @@
   --color-sand-900: #2e2316;
   --color-sand-950: #1a1409;
 }
+
+:root {
+  --layout-card-gap: 1rem;
+  --layout-card-padding: 1rem;
+  --layout-card-radius: 0.5rem;
+  --layout-section-spacing: 1.5rem;
+  --layout-section-title-spacing: 0.75rem;
+}

@@ -10,13 +10,22 @@ const open = defineModel<boolean>('open', { default: false })
 
 const store = useBoardStore()
 const { markDirty } = useEditMode()
-const { getDefinition } = useWidgetRegistry()
+const { getDefinition, getDisplayStyleOptions } = useWidgetRegistry()
 
 const definition = computed(() => getDefinition(props.widget.kind))
 
 const localOptions = ref<Record<string, unknown>>({})
+const localDisplayStyle = ref<string>('')
 
 const { getAllPlugins } = usePluginRegistry()
+
+const displayStyleItems = computed(() => {
+  const variants = getDisplayStyleOptions(props.widget.kind)
+  return [
+    { label: 'Inherit (layout default)', value: '' },
+    ...variants.map(variant => ({ label: variant.label, value: variant.id }))
+  ]
+})
 
 const enabledPlugins = computed(() => {
   return getAllPlugins().filter((plugin) => {
@@ -33,6 +42,7 @@ const pluginConfigs = ref<Record<string, Record<string, unknown>>>({})
 watch(open, (val) => {
   if (val) {
     localOptions.value = JSON.parse(JSON.stringify(props.widget.options))
+    localDisplayStyle.value = props.widget.displayStyle ?? ''
 
     const configs: Record<string, Record<string, unknown>> = {}
     for (const plugin of enabledPlugins.value) {
@@ -86,6 +96,11 @@ function createAndAssignLabel() {
 
 function handleSave() {
   store.updateWidgetOptions(props.section.id, props.widget.id, localOptions.value)
+  store.updateWidgetDisplayStyle(
+    props.section.id,
+    props.widget.id,
+    localDisplayStyle.value || undefined
+  )
 
   for (const [pluginId, config] of Object.entries(pluginConfigs.value)) {
     store.updateWidgetPlugins(props.section.id, props.widget.id, {
@@ -113,6 +128,18 @@ function handleSave() {
           />
           <span class="font-medium">{{ definition?.label || widget.kind }}</span>
         </div>
+
+        <UFormField
+          v-if="displayStyleItems.length > 2"
+          label="Display style"
+          hint="How this widget is rendered"
+        >
+          <USelect
+            :model-value="localDisplayStyle"
+            :items="displayStyleItems"
+            @update:model-value="localDisplayStyle = $event"
+          />
+        </UFormField>
 
         <template v-if="widget.kind === 'service-link'">
           <UFormField label="Title">

@@ -32,7 +32,7 @@ if (store.board) {
         />
       </div>
 
-      <BoardView v-else-if="store.board" />
+      <BoardCanvas v-else-if="store.board" />
 
       <div
         v-else

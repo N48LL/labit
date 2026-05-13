@@ -1,4 +1,4 @@
-import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition } from '~~/shared/types'
+import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition, LayoutId } from '~~/shared/types'
 import { generateId } from '~/utils/id'
 
 export const useBoardStore = defineStore('board', () => {
@@ -59,6 +59,11 @@ export const useBoardStore = defineStore('board', () => {
     if (section) Object.assign(section, updates)
   }
 
+  function setLayout(layout: LayoutId) {
+    if (!board.value) return
+    board.value.layout = layout
+  }
+
   function addWidget(sectionId: string, kind: WidgetKind, options: Record<string, unknown> = {}) {
     if (!board.value) return
     const section = board.value.sections.find(s => s.id === sectionId)
@@ -96,6 +101,16 @@ export const useBoardStore = defineStore('board', () => {
   function updateWidgetSpan(sectionId: string, widgetId: string, span: number) {
     const widget = findWidget(sectionId, widgetId)
     if (widget) widget.span = span
+  }
+
+  function updateWidgetDisplayStyle(sectionId: string, widgetId: string, displayStyle: string | undefined) {
+    const widget = findWidget(sectionId, widgetId)
+    if (!widget) return
+    if (displayStyle) {
+      widget.displayStyle = displayStyle
+    } else {
+      delete widget.displayStyle
+    }
   }
 
   function duplicateWidget(sectionId: string, widgetId: string) {
@@ -200,11 +215,13 @@ export const useBoardStore = defineStore('board', () => {
     addSection,
     removeSection,
     updateSection,
+    setLayout,
     addWidget,
     removeWidget,
     updateWidgetOptions,
     updateWidgetPlugins,
     updateWidgetSpan,
+    updateWidgetDisplayStyle,
     duplicateWidget,
     moveWidgetToSection,
     findWidget,

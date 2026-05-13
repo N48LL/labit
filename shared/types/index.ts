@@ -1,4 +1,10 @@
 import type { Component } from 'vue'
+import type { LayoutId, DisplayStyleId } from '../layouts'
+import type { WidgetKindId } from '../widget-kind-styles'
+
+export type { LayoutId } from '../layouts'
+export type { DisplayStyleId } from '../layouts'
+export type { WidgetKindId } from '../widget-kind-styles'
 
 export interface LabelDefinition {
   id: string
@@ -19,7 +25,7 @@ export interface BoardSettings {
   }
 }
 
-export type WidgetKind = 'service-link' | 'clock' | 'notes' | 'network-info'
+export type WidgetKind = WidgetKindId
 
 export type PluginPosition = 'top-right' | 'top-left' | 'bottom-right' | 'bottom-left' | 'footer'
 
@@ -33,6 +39,7 @@ export interface WidgetInstance {
   id: string
   kind: WidgetKind
   span: number
+  displayStyle?: DisplayStyleId
   options: Record<string, unknown>
   plugins: Record<string, {
     enabled: boolean
@@ -67,6 +74,7 @@ export interface Board {
   slug: string
   icon?: string
   iconType?: 'iconify' | 'url' | 'custom'
+  layout?: LayoutId
   settings: BoardSettings
   sections: BoardSection[]
   labels: LabelDefinition[]
@@ -148,6 +156,7 @@ export interface WidgetDefinition {
   defaultOptions: Record<string, unknown>
   minSpan?: number
   maxSpan?: number
+  defaultDisplayStyle: DisplayStyleId
 }
 
 export interface WidgetPlugin {
