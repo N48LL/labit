@@ -42,7 +42,7 @@ const flagIcon = computed(() => countryCode.value ? `i-circle-flags-${countryCod
     />
     <span
       v-if="options.showIp"
-      class="text-[13px] font-mono tabular-nums"
+      class="text-[11px] font-mono tabular-nums text-dimmed"
     >{{ ipText }}</span>
     <span
       v-if="options.showCityCountry && cityCountry"

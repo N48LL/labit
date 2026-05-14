@@ -31,7 +31,7 @@ function handleAddSection() {
   <Teleport to="body">
     <div
       v-if="isEditing"
-      class="fixed left-1/2 -translate-x-1/2 bottom-4 z-40 flex items-center gap-1 px-2 py-1.5 rounded-2xl bg-default border border-primary shadow-lg backdrop-blur"
+      class="fixed left-1/2 -translate-x-1/2 bottom-4 z-40 flex items-center gap-1 px-2 py-1.5 rounded-2xl bg-default border border-primary shadow-lg backdrop-blur [&_button:not(:disabled)]:cursor-pointer"
     >
       <UButton
         icon="i-lucide-layout-grid"

@@ -78,7 +78,7 @@ const pingColor = computed(() => {
   >
     <span
       class="shrink-0 size-[26px] flex items-center justify-center"
-      :style="{ backgroundColor: accent + '20' }"
+      :style="options.iconBackground ? { backgroundColor: accent + '20' } : {}"
     >
       <ServiceIcon
         :icon="options.icon"

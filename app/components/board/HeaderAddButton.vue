@@ -3,6 +3,8 @@ import type { HeaderItem, HeaderItemType } from '~~/shared/types'
 import { HEADER_ITEM_TYPES } from '~~/shared/header-items'
 import { generateId } from '~/utils/id'
 
+const ADDABLE_TYPES = HEADER_ITEM_TYPES.filter(type => type !== 'edit-theme-actions')
+
 const props = defineProps<{
   slotId: 'left' | 'center' | 'right'
 }>()
@@ -16,8 +18,8 @@ const open = ref(false)
 const LABELS: Record<HeaderItemType, string> = {
   'brand': 'Logo & Title',
   'edit-theme-actions': 'Edit & Theme actions',
-  'clock': 'Compact Clock',
-  'network-info': 'Compact Network Info',
+  'clock': 'Clock',
+  'network-info': 'Network Info',
   'spacer': 'Spacer'
 }
 
@@ -60,7 +62,7 @@ function handleAdd(type: HeaderItemType) {
     <template #content>
       <div class="p-1 min-w-[200px]">
         <button
-          v-for="type in HEADER_ITEM_TYPES"
+          v-for="type in ADDABLE_TYPES"
           :key="type"
           type="button"
           class="w-full flex items-center gap-2 px-2 py-1.5 rounded-md hover:bg-elevated text-left text-sm cursor-pointer"

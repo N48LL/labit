@@ -19,10 +19,12 @@ const localDisplayStyle = ref<string>('')
 
 const { getAllPlugins } = usePluginRegistry()
 
+const INHERIT_DISPLAY_STYLE = '__inherit__'
+
 const displayStyleItems = computed(() => {
   const variants = getDisplayStyleOptions(props.widget.kind)
   return [
-    { label: 'Inherit (layout default)', value: '' },
+    { label: 'Inherit (layout default)', value: INHERIT_DISPLAY_STYLE },
     ...variants.map(variant => ({ label: variant.label, value: variant.id }))
   ]
 })
@@ -42,7 +44,7 @@ const pluginConfigs = ref<Record<string, Record<string, unknown>>>({})
 watch(open, (val) => {
   if (val) {
     localOptions.value = JSON.parse(JSON.stringify(props.widget.options))
-    localDisplayStyle.value = props.widget.displayStyle ?? ''
+    localDisplayStyle.value = props.widget.displayStyle ?? INHERIT_DISPLAY_STYLE
 
     const configs: Record<string, Record<string, unknown>> = {}
     for (const plugin of enabledPlugins.value) {
@@ -99,7 +101,7 @@ function handleSave() {
   store.updateWidgetDisplayStyle(
     props.section.id,
     props.widget.id,
-    localDisplayStyle.value || undefined
+    localDisplayStyle.value === INHERIT_DISPLAY_STYLE ? undefined : localDisplayStyle.value
   )
 
   for (const [pluginId, config] of Object.entries(pluginConfigs.value)) {
