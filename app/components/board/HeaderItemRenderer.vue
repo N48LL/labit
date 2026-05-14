@@ -54,7 +54,7 @@ const showSettings = ref(false)
       />
     </button>
     <UPopover
-      v-if="isEditing"
+      v-if="isEditing && item.type !== 'edit-theme-actions'"
       v-model:open="showSettings"
     >
       <button

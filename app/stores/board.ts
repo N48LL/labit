@@ -95,7 +95,12 @@ export const useBoardStore = defineStore('board', () => {
     const header = ensureHeader(layoutId)
     if (!header) return
     for (const slot of ['left', 'center', 'right'] as const) {
-      header[slot] = header[slot].filter(i => i.id !== itemId)
+      header[slot] = header[slot].filter((i) => {
+        if (i.id !== itemId) return true
+        // edit-theme-actions is the only way to enter edit mode; refuse to remove it
+        if (i.type === 'edit-theme-actions') return true
+        return false
+      })
     }
   }
 
