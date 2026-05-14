@@ -1,5 +1,6 @@
 import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition, LayoutId, HeaderItem, HeaderConfig } from '~~/shared/types'
 import { LAYOUTS } from '~~/shared/layouts'
+import { cloneDefaultHeader, isHeaderItemRemovable } from '~~/shared/header-items'
 import { generateId } from '~/utils/id'
 
 export const useBoardStore = defineStore('board', () => {
@@ -69,12 +70,7 @@ export const useBoardStore = defineStore('board', () => {
     if (!board.value) return null
     if (!board.value.headers) board.value.headers = {}
     if (!board.value.headers[layoutId]) {
-      const defaults = LAYOUTS[layoutId].defaultHeader
-      board.value.headers[layoutId] = {
-        left: defaults.left.map(item => ({ ...item })),
-        center: defaults.center.map(item => ({ ...item })),
-        right: defaults.right.map(item => ({ ...item }))
-      }
+      board.value.headers[layoutId] = cloneDefaultHeader(LAYOUTS[layoutId].defaultHeader, generateId)
     }
     return board.value.headers[layoutId] ?? null
   }
@@ -95,12 +91,7 @@ export const useBoardStore = defineStore('board', () => {
     const header = ensureHeader(layoutId)
     if (!header) return
     for (const slot of ['left', 'center', 'right'] as const) {
-      header[slot] = header[slot].filter((i) => {
-        if (i.id !== itemId) return true
-        // edit-theme-actions is the only way to enter edit mode; refuse to remove it
-        if (i.type === 'edit-theme-actions') return true
-        return false
-      })
+      header[slot] = header[slot].filter(i => i.id !== itemId || !isHeaderItemRemovable(i))
     }
   }
 

@@ -61,7 +61,6 @@
   --layout-header-gap: 0.5rem;
 }
 
-/* Header drag-drop visual feedback */
 .header-item-ghost {
   opacity: 0.35;
   outline: 2px dashed #3b82f6;

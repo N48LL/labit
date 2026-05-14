@@ -108,6 +108,10 @@ export interface NotesOptions {
   content: string
 }
 
+export interface SpacerOptions {
+  width: number
+}
+
 export type NetworkInfoFlagStyle = 'circle' | 'rectangular' | 'square'
 
 export interface NetworkInfoOptions {

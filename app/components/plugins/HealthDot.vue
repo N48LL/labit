@@ -1,4 +1,3 @@
-<!-- app/components/plugins/HealthDot.vue -->
 <script setup lang="ts">
 import type { WidgetInstance } from '~~/shared/types'
 

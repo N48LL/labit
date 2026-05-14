@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { defineAsyncComponent, type Component } from 'vue'
-import type { HeaderItem, HeaderItemType, ClockOptions, NetworkInfoOptions } from '~~/shared/types'
+import type { HeaderItem, HeaderItemType, ClockOptions, NetworkInfoOptions, SpacerOptions } from '~~/shared/types'
 import HeaderItemSettings from './HeaderItemSettings.vue'
+
+const COMPONENTS: Record<HeaderItemType, Component> = {
+  'brand': defineAsyncComponent(() => import('~/components/board/HeaderBrand.vue')),
+  'edit-theme-actions': defineAsyncComponent(() => import('~/components/board/HeaderActions.vue')),
+  'clock': defineAsyncComponent(() => import('~/components/widgets/ClockHeader.vue')),
+  'network-info': defineAsyncComponent(() => import('~/components/widgets/NetworkInfoHeader.vue')),
+  'spacer': defineAsyncComponent(() => import('~/components/widgets/SpacerWidget.vue'))
+}
 
 const props = defineProps<{
   item: HeaderItem
@@ -15,14 +23,7 @@ const emit = defineEmits<{
 
 const { isEditing } = useEditMode()
 
-const componentMap: Record<HeaderItemType, () => Promise<{ default: Component }>> = {
-  'brand': () => import('~/components/board/HeaderBrand.vue'),
-  'edit-theme-actions': () => import('~/components/board/HeaderActions.vue'),
-  'clock': () => import('~/components/widgets/ClockHeader.vue'),
-  'network-info': () => import('~/components/widgets/NetworkInfoHeader.vue')
-}
-
-const resolved = computed(() => defineAsyncComponent(componentMap[props.item.type]))
+const resolved = computed(() => COMPONENTS[props.item.type])
 
 const itemProps = computed(() => {
   if (props.item.type === 'clock') {
@@ -30,6 +31,9 @@ const itemProps = computed(() => {
   }
   if (props.item.type === 'network-info') {
     return { options: props.item.options as unknown as NetworkInfoOptions }
+  }
+  if (props.item.type === 'spacer') {
+    return { options: props.item.options as unknown as SpacerOptions }
   }
   return {}
 })

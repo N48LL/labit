@@ -1,4 +1,3 @@
-<!-- app/components/plugins/HealthDotSettings.vue -->
 <script setup lang="ts">
 const config = defineModel<Record<string, unknown>>('config', { default: () => ({}) })
 

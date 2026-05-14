@@ -17,14 +17,16 @@ const LABELS: Record<HeaderItemType, string> = {
   'brand': 'Logo & Title',
   'edit-theme-actions': 'Edit & Theme actions',
   'clock': 'Compact Clock',
-  'network-info': 'Compact Network Info'
+  'network-info': 'Compact Network Info',
+  'spacer': 'Spacer'
 }
 
 const ICONS: Record<HeaderItemType, string> = {
   'brand': 'i-lucide-rabbit',
   'edit-theme-actions': 'i-lucide-settings-2',
   'clock': 'i-lucide-clock',
-  'network-info': 'i-lucide-globe'
+  'network-info': 'i-lucide-globe',
+  'spacer': 'i-lucide-square-dashed'
 }
 
 function defaultsFor(type: HeaderItemType): Omit<HeaderItem, 'id'> {
@@ -33,6 +35,9 @@ function defaultsFor(type: HeaderItemType): Omit<HeaderItem, 'id'> {
   }
   if (type === 'network-info') {
     return { type, options: { mode: 'server', showFlag: true, showIp: true, showCityCountry: false } }
+  }
+  if (type === 'spacer') {
+    return { type, options: { width: 60 } }
   }
   return { type }
 }

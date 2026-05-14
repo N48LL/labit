@@ -79,12 +79,8 @@ export async function listBoards(): Promise<Board[]> {
   const boards: Board[] = []
   for (const file of files) {
     if (!file.endsWith('.json')) continue
-    try {
-      const raw = await readFile(join(BOARDS_DIR, file), 'utf-8')
-      boards.push(normalize(JSON.parse(raw) as Board))
-    } catch {
-      // skip malformed files
-    }
+    const board = await readBoard(file.slice(0, -5))
+    if (board) boards.push(board)
   }
   return boards
 }

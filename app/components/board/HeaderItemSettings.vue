@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { HeaderItem, ClockOptions, NetworkInfoOptions } from '~~/shared/types'
+import type { HeaderItem, ClockOptions, NetworkInfoOptions, SpacerOptions } from '~~/shared/types'
 
 const props = defineProps<{ item: HeaderItem }>()
 const emit = defineEmits<{
@@ -9,6 +9,7 @@ const emit = defineEmits<{
 
 const clockOptions = computed(() => (props.item.options ?? {}) as unknown as ClockOptions)
 const networkOptions = computed(() => (props.item.options ?? {}) as unknown as NetworkInfoOptions)
+const spacerOptions = computed(() => (props.item.options ?? {}) as unknown as SpacerOptions)
 
 function set(key: string, value: unknown) {
   emit('update-options', { ...(props.item.options || {}), [key]: value })
@@ -59,6 +60,22 @@ function set(key: string, value: unknown) {
         label="Show city, country"
         @update:model-value="set('showCityCountry', $event)"
       />
+    </template>
+
+    <template v-else-if="item.type === 'spacer'">
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="text-muted">Width</span>
+          <span class="font-mono text-dimmed">{{ spacerOptions.width ?? 60 }}px</span>
+        </div>
+        <USlider
+          :model-value="spacerOptions.width ?? 60"
+          :min="0"
+          :max="400"
+          :step="4"
+          @update:model-value="set('width', $event)"
+        />
+      </div>
     </template>
 
     <template v-else>

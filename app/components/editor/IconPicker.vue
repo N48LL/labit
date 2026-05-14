@@ -120,7 +120,6 @@ const tabs = [
       size="sm"
     />
 
-    <!-- Iconify tab -->
     <div
       v-if="activeTab === 'iconify'"
       class="flex flex-col gap-3"
@@ -146,12 +145,10 @@ const tabs = [
       />
     </div>
 
-    <!-- Image tab (URL + Custom unified) -->
     <div
       v-if="activeTab === 'custom'"
       class="flex flex-col gap-3"
     >
-      <!-- URL input with download button -->
       <div class="flex gap-2">
         <UInput
           :model-value="imageType === 'url' ? imageValue : ''"
@@ -190,7 +187,6 @@ const tabs = [
         </UPopover>
       </div>
 
-      <!-- Preview -->
       <div class="flex items-center gap-3 p-3 rounded-lg border border-default">
         <img
           v-if="imagePreviewSrc"
@@ -215,7 +211,6 @@ const tabs = [
         />
       </div>
 
-      <!-- Upload + Browse -->
       <div class="flex gap-2">
         <UButton
           label="Browse Saved"

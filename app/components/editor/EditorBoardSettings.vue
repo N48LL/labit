@@ -58,7 +58,6 @@ function handleSave() {
   if (!store.board) return
   store.board.settings.theme.primary = localPrimary.value
   store.board.settings.theme.neutral = localNeutral.value
-  store.setLayout(localLayout.value)
   markDirty()
   open.value = false
 }
