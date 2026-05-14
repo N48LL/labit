@@ -17,6 +17,13 @@ export const LAYOUTS = {
     icon: 'i-lucide-layout-grid',
     defaultDisplayStyle: {},
     tokens: {}
+  },
+  rack: {
+    label: 'Rack',
+    description: 'Dense, sharp-edged grid for service-heavy boards.',
+    icon: 'i-lucide-server',
+    defaultDisplayStyle: { 'service-link': 'rack' },
+    tokens: {}
   }
 } as const satisfies Record<string, LayoutDefinition>
 

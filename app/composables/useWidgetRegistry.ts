@@ -4,6 +4,7 @@ import { defineAsyncComponent, type Component } from 'vue'
 interface DisplayStyleEntry {
   label: string
   component: Component
+  absorbsPlugins?: readonly string[]
 }
 
 interface KindRecord {
@@ -34,6 +35,11 @@ const kinds: Record<WidgetKind, KindRecord> = {
       full: {
         label: 'Full',
         component: defineAsyncComponent(() => import('~/components/widgets/ServiceLink.vue'))
+      },
+      rack: {
+        label: 'Rack',
+        component: defineAsyncComponent(() => import('~/components/widgets/ServiceLinkRack.vue')),
+        absorbsPlugins: ['health-check']
       }
     }
   },
@@ -110,6 +116,10 @@ export function useWidgetRegistry() {
     return Object.entries(styles).map(([id, entry]) => ({ id, label: entry.label }))
   }
 
+  function getAbsorbedPlugins(kind: WidgetKind, displayStyle: DisplayStyleId): readonly string[] {
+    return kinds[kind]?.displayStyles[displayStyle]?.absorbsPlugins ?? []
+  }
+
   function getAllDefinitions(): WidgetDefinition[] {
     return Object.values(kinds).map(k => k.definition)
   }
@@ -118,6 +128,7 @@ export function useWidgetRegistry() {
     getDefinition,
     getComponentForStyle,
     getDisplayStyleOptions,
+    getAbsorbedPlugins,
     getAllDefinitions
   }
 }

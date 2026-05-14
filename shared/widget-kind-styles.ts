@@ -1,7 +1,7 @@
 import type { DisplayStyleId } from './layouts'
 
 export const WIDGET_KIND_STYLES = {
-  'service-link': ['full'],
+  'service-link': ['full', 'rack'],
   'clock': ['full'],
   'notes': ['full'],
   'network-info': ['full']

@@ -30,22 +30,19 @@ const cardColor = computed(() => {
 })
 
 const cardUi = computed(() => {
-  const body = 'p-[var(--layout-card-padding)]'
+  const body = 'p-[var(--layout-card-padding)]!'
+  const root = 'rounded-[var(--layout-card-radius)]!'
   if (isGhost.value) {
-    return { root: 'rounded-[var(--layout-card-radius)] bg-transparent ring-0 divide-y-0', body }
+    return { root: `${root} bg-transparent ring-0 divide-y-0`, body }
   }
-  return { body }
+  return { root, body }
 })
 
 const resolvedPlugins = computed(() => {
   return useResolvedPlugins(props.section, props.widget)
 })
 
-function pluginsAt(position: string) {
-  return resolvedPlugins.value.filter(p => p.position === position)
-}
-
-const { getComponentForStyle, getDefinition } = useWidgetRegistry()
+const { getComponentForStyle, getDefinition, getAbsorbedPlugins } = useWidgetRegistry()
 const store = useBoardStore()
 
 const resolvedStyle = computed(() => {
@@ -58,6 +55,16 @@ const resolvedStyle = computed(() => {
     WIDGET_KIND_STYLES[props.widget.kind]
   )
 })
+
+const absorbedPlugins = computed(() =>
+  getAbsorbedPlugins(props.widget.kind, resolvedStyle.value)
+)
+
+function pluginsAt(position: string) {
+  return resolvedPlugins.value.filter(
+    p => p.position === position && !absorbedPlugins.value.includes(p.id)
+  )
+}
 
 const variantComponent = computed(() => getComponentForStyle(props.widget.kind, resolvedStyle.value))
 </script>
@@ -109,6 +116,8 @@ const variantComponent = computed(() => getComponentForStyle(props.widget.kind, 
         :is="variantComponent"
         v-if="variantComponent"
         :options="widget.options"
+        :section="section"
+        :widget="widget"
       />
       <div
         v-else

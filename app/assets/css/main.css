@@ -48,3 +48,10 @@
   --layout-section-spacing: 1.5rem;
   --layout-section-title-spacing: 0.75rem;
 }
+
+:root[data-layout='rack'] {
+  --layout-card-radius: 0;
+  --layout-card-padding: 0.5rem 0.75rem;
+  --layout-card-gap: 0.5rem;
+  --layout-section-title-spacing: 0.5rem;
+}
