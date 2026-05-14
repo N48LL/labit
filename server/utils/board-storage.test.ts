@@ -70,4 +70,45 @@ describe('normalize', () => {
     normalize(board)
     expect(board.sections[0]!.widgets[0]!.displayStyle).toBe('full')
   })
+
+  it('drops headers for unknown layout IDs', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const board = makeBoard({
+      headers: {
+        default: { left: [], center: [], right: [] },
+        bogus: { left: [], center: [], right: [] }
+      } as never
+    })
+    normalize(board)
+    expect(board.headers?.default).toBeDefined()
+    expect((board.headers as Record<string, unknown>).bogus).toBeUndefined()
+    expect(warn).toHaveBeenCalled()
+  })
+
+  it('drops header items with unknown types', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const board = makeBoard({
+      headers: {
+        default: {
+          left: [{ id: '1', type: 'brand' }, { id: '2', type: 'bogus' } as never],
+          center: [],
+          right: []
+        }
+      }
+    })
+    normalize(board)
+    expect(board.headers?.default?.left).toHaveLength(1)
+    expect(board.headers?.default?.left[0]?.type).toBe('brand')
+    expect(warn).toHaveBeenCalled()
+  })
+
+  it('tolerates missing slot arrays by treating them as empty', () => {
+    const board = makeBoard({
+      headers: { default: {} as never }
+    })
+    normalize(board)
+    expect(board.headers?.default?.left).toEqual([])
+    expect(board.headers?.default?.center).toEqual([])
+    expect(board.headers?.default?.right).toEqual([])
+  })
 })

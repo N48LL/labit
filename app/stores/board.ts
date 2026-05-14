@@ -1,4 +1,5 @@
-import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition, LayoutId } from '~~/shared/types'
+import type { Board, BoardSection, WidgetInstance, WidgetKind, LabelDefinition, LayoutId, HeaderItem, HeaderConfig } from '~~/shared/types'
+import { LAYOUTS } from '~~/shared/layouts'
 import { generateId } from '~/utils/id'
 
 export const useBoardStore = defineStore('board', () => {
@@ -62,6 +63,40 @@ export const useBoardStore = defineStore('board', () => {
   function setLayout(layout: LayoutId) {
     if (!board.value) return
     board.value.layout = layout
+  }
+
+  function ensureHeader(layoutId: LayoutId): HeaderConfig | null {
+    if (!board.value) return null
+    if (!board.value.headers) board.value.headers = {}
+    if (!board.value.headers[layoutId]) {
+      const defaults = LAYOUTS[layoutId].defaultHeader
+      board.value.headers[layoutId] = {
+        left: defaults.left.map(item => ({ ...item })),
+        center: defaults.center.map(item => ({ ...item })),
+        right: defaults.right.map(item => ({ ...item }))
+      }
+    }
+    return board.value.headers[layoutId] ?? null
+  }
+
+  function setHeaderSlot(layoutId: LayoutId, slot: 'left' | 'center' | 'right', items: HeaderItem[]) {
+    const header = ensureHeader(layoutId)
+    if (!header) return
+    header[slot] = items
+  }
+
+  function addHeaderItem(layoutId: LayoutId, slot: 'left' | 'center' | 'right', item: HeaderItem) {
+    const header = ensureHeader(layoutId)
+    if (!header) return
+    header[slot].push(item)
+  }
+
+  function removeHeaderItem(layoutId: LayoutId, itemId: string) {
+    const header = ensureHeader(layoutId)
+    if (!header) return
+    for (const slot of ['left', 'center', 'right'] as const) {
+      header[slot] = header[slot].filter(i => i.id !== itemId)
+    }
   }
 
   function addWidget(sectionId: string, kind: WidgetKind, options: Record<string, unknown> = {}) {
@@ -216,6 +251,9 @@ export const useBoardStore = defineStore('board', () => {
     removeSection,
     updateSection,
     setLayout,
+    setHeaderSlot,
+    addHeaderItem,
+    removeHeaderItem,
     addWidget,
     removeWidget,
     updateWidgetOptions,

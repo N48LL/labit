@@ -3,6 +3,7 @@ import { join } from 'node:path'
 import type { Board } from '~~/shared/types'
 import { LAYOUTS } from '~~/shared/layouts'
 import { WIDGET_KIND_STYLES } from '~~/shared/widget-kind-styles'
+import { HEADER_ITEM_TYPES } from '~~/shared/header-items'
 import { BOARDS_DIR } from './constants'
 
 function boardPath(id: string): string {
@@ -26,6 +27,26 @@ export function normalize(board: Board): Board {
           `[labbit] widget "${widget.id}" has unknown displayStyle "${widget.displayStyle}" for kind "${widget.kind}", clearing`
         )
         delete widget.displayStyle
+      }
+    }
+  }
+
+  if (board.headers) {
+    for (const layoutId of Object.keys(board.headers)) {
+      if (!(layoutId in LAYOUTS)) {
+        console.warn(`[labbit] board "${board.id}" has header for unknown layout "${layoutId}", dropping`)
+        Reflect.deleteProperty(board.headers, layoutId)
+        continue
+      }
+      const header = board.headers[layoutId as keyof typeof board.headers]
+      if (!header) continue
+      for (const slot of ['left', 'center', 'right'] as const) {
+        const items = header[slot] ?? []
+        header[slot] = items.filter((item) => {
+          if ((HEADER_ITEM_TYPES as readonly string[]).includes(item.type)) return true
+          console.warn(`[labbit] dropping unknown header item type "${item.type}" in board "${board.id}"`)
+          return false
+        })
       }
     }
   }

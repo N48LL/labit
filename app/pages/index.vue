@@ -20,7 +20,7 @@ if (store.board) {
     />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <BoardToolbar />
+      <BoardHeader />
 
       <div
         v-if="store.loading"
@@ -45,5 +45,6 @@ if (store.board) {
         <p>Failed to load board.</p>
       </div>
     </div>
+    <EditToolbar />
   </div>
 </template>

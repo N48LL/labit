@@ -56,6 +56,10 @@ const kinds: Record<WidgetKind, KindRecord> = {
       full: {
         label: 'Full',
         component: defineAsyncComponent(() => import('~/components/widgets/ClockWidget.vue'))
+      },
+      header: {
+        label: 'Header',
+        component: defineAsyncComponent(() => import('~/components/widgets/ClockHeader.vue'))
       }
     }
   },
@@ -92,6 +96,10 @@ const kinds: Record<WidgetKind, KindRecord> = {
       full: {
         label: 'Full',
         component: defineAsyncComponent(() => import('~/components/widgets/NetworkInfoWidget.vue'))
+      },
+      header: {
+        label: 'Header',
+        component: defineAsyncComponent(() => import('~/components/widgets/NetworkInfoHeader.vue'))
       }
     }
   }

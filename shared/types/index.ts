@@ -1,10 +1,12 @@
 import type { Component } from 'vue'
 import type { LayoutId, DisplayStyleId } from '../layouts'
 import type { WidgetKindId } from '../widget-kind-styles'
+import type { HeaderConfig } from '../header-items'
 
 export type { LayoutId } from '../layouts'
 export type { DisplayStyleId } from '../layouts'
 export type { WidgetKindId } from '../widget-kind-styles'
+export type { HeaderItem, HeaderConfig, HeaderItemType } from '../header-items'
 
 export interface LabelDefinition {
   id: string
@@ -75,6 +77,7 @@ export interface Board {
   icon?: string
   iconType?: 'iconify' | 'url' | 'custom'
   layout?: LayoutId
+  headers?: Partial<Record<LayoutId, HeaderConfig>>
   settings: BoardSettings
   sections: BoardSection[]
   labels: LabelDefinition[]
