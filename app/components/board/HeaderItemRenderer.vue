@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { defineAsyncComponent, type Component } from 'vue'
 import type { HeaderItem, HeaderItemType, ClockOptions, NetworkInfoOptions } from '~~/shared/types'
+import HeaderItemSettings from './HeaderItemSettings.vue'
 
 const props = defineProps<{
   item: HeaderItem
@@ -8,7 +9,8 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  remove: [itemId: string]
+  'remove': [itemId: string]
+  'update-options': [itemId: string, options: Record<string, unknown>]
 }>()
 
 const { isEditing } = useEditMode()
@@ -32,9 +34,7 @@ const itemProps = computed(() => {
   return {}
 })
 
-function onRemove() {
-  emit('remove', props.item.id)
-}
+const showSettings = ref(false)
 </script>
 
 <template>
@@ -53,18 +53,28 @@ function onRemove() {
         class="size-3 text-muted"
       />
     </button>
-    <button
+    <UPopover
       v-if="isEditing"
-      type="button"
-      class="absolute -top-1.5 -right-1.5 z-10 size-5 rounded-full bg-elevated border border-primary flex items-center justify-center cursor-pointer opacity-0 group-hover/header-item:opacity-100 transition-opacity hover:text-error"
-      aria-label="Remove item"
-      @click="onRemove"
+      v-model:open="showSettings"
     >
-      <UIcon
-        name="i-lucide-x"
-        class="size-3"
-      />
-    </button>
+      <button
+        type="button"
+        class="absolute -top-1.5 -right-1.5 z-10 size-5 rounded-full bg-elevated border border-primary flex items-center justify-center cursor-pointer opacity-0 group-hover/header-item:opacity-100 transition-opacity"
+        aria-label="Item settings"
+      >
+        <UIcon
+          name="i-lucide-cog"
+          class="size-3"
+        />
+      </button>
+      <template #content>
+        <HeaderItemSettings
+          :item="item"
+          @update-options="(opts) => emit('update-options', item.id, opts)"
+          @remove="() => { showSettings = false; emit('remove', item.id) }"
+        />
+      </template>
+    </UPopover>
 
     <component
       :is="resolved"

@@ -11,6 +11,7 @@ const emit = defineEmits<{
   'update:items': [items: HeaderItem[]]
   'remove': [itemId: string]
   'add': [slotId: 'left' | 'center' | 'right', item: HeaderItem]
+  'update-options': [itemId: string, options: Record<string, unknown>]
 }>()
 
 const { isEditing } = useEditMode()
@@ -47,6 +48,7 @@ const localItems = computed({
         :item="item"
         :slot-id="slotId"
         @remove="(id: string) => emit('remove', id)"
+        @update-options="(id: string, opts: Record<string, unknown>) => emit('update-options', id, opts)"
       />
     </VueDraggable>
     <HeaderAddButton

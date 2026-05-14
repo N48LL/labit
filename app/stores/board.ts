@@ -99,6 +99,18 @@ export const useBoardStore = defineStore('board', () => {
     }
   }
 
+  function updateHeaderItemOptions(layoutId: LayoutId, itemId: string, options: Record<string, unknown>) {
+    const header = ensureHeader(layoutId)
+    if (!header) return
+    for (const slot of ['left', 'center', 'right'] as const) {
+      const item = header[slot].find(i => i.id === itemId)
+      if (item) {
+        item.options = { ...(item.options || {}), ...options }
+        return
+      }
+    }
+  }
+
   function addWidget(sectionId: string, kind: WidgetKind, options: Record<string, unknown> = {}) {
     if (!board.value) return
     const section = board.value.sections.find(s => s.id === sectionId)
@@ -254,6 +266,7 @@ export const useBoardStore = defineStore('board', () => {
     setHeaderSlot,
     addHeaderItem,
     removeHeaderItem,
+    updateHeaderItemOptions,
     addWidget,
     removeWidget,
     updateWidgetOptions,

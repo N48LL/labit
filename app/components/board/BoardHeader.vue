@@ -27,6 +27,11 @@ function onAdd(slot: 'left' | 'center' | 'right', item: HeaderItem) {
   store.addHeaderItem(activeLayoutId.value, slot, item)
   markDirty()
 }
+
+function onUpdateOptions(itemId: string, options: Record<string, unknown>) {
+  store.updateHeaderItemOptions(activeLayoutId.value, itemId, options)
+  markDirty()
+}
 </script>
 
 <template>
@@ -46,6 +51,7 @@ function onAdd(slot: 'left' | 'center' | 'right', item: HeaderItem) {
       @update:items="(items: HeaderItem[]) => onUpdateSlot('left', items)"
       @remove="onRemove"
       @add="onAdd"
+      @update-options="onUpdateOptions"
     />
     <HeaderSlot
       :slot-id="'center'"
@@ -54,6 +60,7 @@ function onAdd(slot: 'left' | 'center' | 'right', item: HeaderItem) {
       @update:items="(items: HeaderItem[]) => onUpdateSlot('center', items)"
       @remove="onRemove"
       @add="onAdd"
+      @update-options="onUpdateOptions"
     />
     <HeaderSlot
       :slot-id="'right'"
@@ -61,6 +68,7 @@ function onAdd(slot: 'left' | 'center' | 'right', item: HeaderItem) {
       @update:items="(items: HeaderItem[]) => onUpdateSlot('right', items)"
       @remove="onRemove"
       @add="onAdd"
+      @update-options="onUpdateOptions"
     />
   </div>
 </template>
